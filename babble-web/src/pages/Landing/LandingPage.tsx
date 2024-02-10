@@ -2,7 +2,8 @@ import styled from "styled-components";
 import { GlassmorphismDiv } from "../../StyledComponents/gmDiv";
 import { useEffect, useState } from "react";
 import KakImage from "../../assets/Kak.png";
-import { baseUrl } from "../../Constants";
+import { clientUrl } from "../../Constants";
+import { useMyLocationContext } from "../../Context/MyLocationContext";
 
 const MainDiv = styled(GlassmorphismDiv)<{ $check: boolean }>`
   border-radius: ${(prop) => (prop.$check ? "30%" : "40%")};
@@ -27,12 +28,12 @@ const StyledCheckInput = styled.div<{ $check: boolean }>`
   flex-direction: column;
   align-items: center;
 
-  position: relative; /* 상대적 위치 설정 */
-  transition: transform 0.3s ease; /* transform 속성에 대한 애니메이션 적용 */
+  position: relative;
+  transition: transform 0.3s ease;
   transform: ${({ $check }) =>
     $check
-      ? "translateY(-5px)"
-      : "translateY(20px)"}; /* 체크 여부에 따라 위치 변경 */
+      ? "translateY(0px)"
+      : "translateY(10px)"}; /* 체크 여부에 따라 위치 변경 */
 
   input {
     order: 2;
@@ -73,14 +74,42 @@ const StyledKakaoLogin = styled.button<{ $show: boolean }>`
 const Landing = () => {
   const [check, setCheck] = useState(false);
 
+  const { updateCurLocation } = useMyLocationContext();
+
+  const requestLocationAccess = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("위치 정보 접근 성공");
+          updateCurLocation(position);
+        },
+        (error) => {
+          console.error("위치 정보 접근 실패", error);
+        }
+      );
+    } else {
+      console.error("This browser does not support Geolocation.");
+    }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const isChecked = e.target.checked;
+    setCheck(isChecked);
+
+    if (isChecked) {
+      requestLocationAccess();
+    }
+  };
+
   const Rest_api_key = "66e0056e554144467f120b3504e71658";
-  const redirect_uri = baseUrl + "/auth";
+  const redirect_uri = clientUrl + "/auth";
   // oauth 요청 URL
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
   const handleLogin = () => {
     window.location.href = kakaoURL;
   };
 
+  //카카오 로그인 페이지에서 뒤로가기 할 경우 버그 (미해결)
   useEffect(() => {
     // 페이지 로드 시 체크박스 상태 확인
     const checkbox = document.getElementById("check") as HTMLInputElement;
@@ -97,7 +126,7 @@ const Landing = () => {
           id="check"
           type="checkbox"
           checked={check}
-          onChange={() => setCheck(!check)}
+          onChange={handleCheckboxChange}
         />
         <label htmlFor="check">위치 정보 수집 동의</label>
       </StyledCheckInput>

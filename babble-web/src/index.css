@@ -1,25 +1,90 @@
 :root {
+  /*색상 변수*/
+  /* Color Theme Swatches in Hex */
+  .Jet-AI-1-hex {
+    color: #0c2ff2;
+  }
+  .Jet-AI-2-hex {
+    color: #3552f2;
+  }
+  .Jet-AI-3-hex {
+    color: #576ef2;
+  }
+  .Jet-AI-4-hex {
+    color: #c9d3f2;
+  }
+  .Jet-AI-5-hex {
+    color: #80a6f2;
+  }
+
+  /* Color Theme Swatches in RGBA */
+  .Jet-AI-1-rgba {
+    color: rgba(12, 46, 242, 1);
+  }
+  .Jet-AI-2-rgba {
+    color: rgba(53, 81, 242, 1);
+  }
+  .Jet-AI-3-rgba {
+    color: rgba(87, 110, 242, 1);
+  }
+  .Jet-AI-4-rgba {
+    color: rgba(201, 211, 242, 1);
+  }
+  .Jet-AI-5-rgba {
+    color: rgba(128, 166, 242, 1);
+  }
+
+  /* Color Theme Swatches in HSLA */
+  .Jet-AI-1-hsla {
+    color: hsla(230, 90, 49, 1);
+  }
+  .Jet-AI-2-hsla {
+    color: hsla(230, 88, 57, 1);
+  }
+  .Jet-AI-3-hsla {
+    color: hsla(230, 85, 64, 1);
+  }
+  .Jet-AI-4-hsla {
+    color: hsla(224, 61, 86, 1);
+  }
+  .Jet-AI-5-hsla {
+    color: hsla(219, 81, 72, 1);
+  }
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #0c2ff2;
+  background: rgb(201, 211, 242);
+  background: -moz-radial-gradient(
+    circle,
+    rgba(201, 211, 242, 1) 0%,
+    rgba(141, 174, 242, 1) 25%,
+    rgba(87, 110, 242, 1) 70%,
+    rgba(12, 47, 242, 1) 100%
+  );
+  background: -webkit-radial-gradient(
+    circle,
+    rgba(201, 211, 242, 1) 0%,
+    rgba(141, 174, 242, 1) 25%,
+    rgba(87, 110, 242, 1) 70%,
+    rgba(12, 47, 242, 1) 100%
+  );
+  background: radial-gradient(
+    circle,
+    rgba(201, 211, 242, 1) 0%,
+    rgba(141, 174, 242, 1) 25%,
+    rgba(87, 110, 242, 1) 70%,
+    rgba(12, 47, 242, 1) 100%
+  );
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c9d3f2",endColorstr="#0c2ff2",GradientType=1);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
 }
 
 body {
@@ -31,38 +96,5 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+  font-size: calc(2.2rem + 2.5vw);
 }

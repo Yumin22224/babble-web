@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { GlassmorphismDiv } from "../../StyledComponents/gmDiv";
 import { useState } from "react";
-import KakaoLogin from "react-kakao-login";
 import KakImage from "../../assets/Kak.png";
 import { baseUrl } from "../../Constants";
 

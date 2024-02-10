@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { GlassmorphismDiv } from "../../StyledComponents/gmDiv";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import KakImage from "../../assets/Kak.png";
 import { baseUrl } from "../../Constants";
 
@@ -80,6 +80,14 @@ const Landing = () => {
   const handleLogin = () => {
     window.location.href = kakaoURL;
   };
+
+  useEffect(() => {
+    // 페이지 로드 시 체크박스 상태 확인
+    const checkbox = document.getElementById("check") as HTMLInputElement;
+    if (checkbox) {
+      setCheck(checkbox.checked);
+    }
+  }, []);
 
   return (
     <MainDiv $check={check}>

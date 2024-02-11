@@ -14,11 +14,13 @@ const LoginToMain = () => {
     };
 
     const code = getCodeFromUrl();
-    console.log(code);
+    //console.log(code);
 
     if (code) {
       kakaoLogin(code)
-        .then(() => {
+        .then((response) => {
+          console.log("login success");
+          localStorage.setItem("accessToken", response.data.accessToken);
           navigate("/main");
         })
         .catch((error) => {
@@ -26,7 +28,7 @@ const LoginToMain = () => {
           navigate("/main"); //일단 메인으로 이동
         });
     }
-  }, []);
+  }, [navigate]);
 
   return <div>Wait for a moment...</div>;
 };

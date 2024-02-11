@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GlassmorphismDiv } from "../../StyledComponents/gmDiv";
+import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
 import { useEffect, useState } from "react";
 import KakImage from "../../assets/Kak.png";
 import { clientUrl } from "../../Constants";

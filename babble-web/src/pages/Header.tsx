@@ -1,8 +1,8 @@
 //화면 상단 로고, 날짜, 시간
 import { useState, useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { GlassmorphismDiv } from "../StyledComponents/gmDiv";
+import { GlassmorphismDiv } from "../StyledComponents/GmDiv";
 
 const StyledHeader = styled(GlassmorphismDiv)`
   position: fixed;
@@ -21,6 +21,18 @@ const StyledHeader = styled(GlassmorphismDiv)`
     margin: 0 10px 10px 10px;
     vertical-align: bottom;
   }
+  h1 {
+    cursor: pointer;
+    transition: text-shadow 0.2s ease-in-out;
+    &:hover {
+      text-shadow:
+        0 0 5px #ffffff,
+        0 0 7px #80a6f2,
+        0 0 9px #80a6f2,
+        0 0 11px #80a6f2,
+        0 0 13px #80a6f2;
+    }
+  }
 
   p {
     font-size: calc(0.5rem + 0.8vw);
@@ -33,6 +45,7 @@ const StyledHeader = styled(GlassmorphismDiv)`
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -61,7 +74,7 @@ const Header = () => {
   return (
     <>
       <StyledHeader>
-        <h1>babble</h1>
+        <h1 onClick={() => navigate(`/main`)}>babble</h1>
         <div>
           <p>{formatDate(currentTime)}</p>
           <p>{formatTime(currentTime)}</p>

@@ -4,13 +4,15 @@ import { useContext } from "react";
 import { ReactNode, createContext, useState } from "react";
 
 export type positionType = {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lng: number;
 };
 
 interface MyLocationContextType {
   curLocation: positionType;
   setCurLocation: (arg: positionType) => void;
+  watchID: number;
+  setWatchID: (arg: number) => void;
   updateCurLocation: (arg: GeolocationPosition) => positionType;
 }
 
@@ -20,21 +22,29 @@ export const MyLocationContext = createContext<
 
 export const MyLocationProvider = ({ children }: { children: ReactNode }) => {
   const [curLocation, setCurLocation] = useState<positionType>({
-    latitude: 0,
-    longitude: 0,
+    lat: 0,
+    lng: 0,
   });
+  const [watchID, setWatchID] = useState(0);
   const updateCurLocation = (p: GeolocationPosition) => {
     const positionObj: positionType = {
-      latitude: p.coords.latitude,
-      longitude: p.coords.longitude,
+      lat: p.coords.latitude,
+      lng: p.coords.longitude,
     };
     setCurLocation(positionObj);
+    console.log(positionObj);
     return positionObj;
   };
 
   return (
     <MyLocationContext.Provider
-      value={{ curLocation, setCurLocation, updateCurLocation }}
+      value={{
+        curLocation,
+        setCurLocation,
+        watchID,
+        setWatchID,
+        updateCurLocation,
+      }}
     >
       {children}
     </MyLocationContext.Provider>

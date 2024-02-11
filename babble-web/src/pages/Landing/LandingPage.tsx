@@ -3,7 +3,7 @@ import { GlassmorphismDiv } from "../../StyledComponents/gmDiv";
 import { useEffect, useState } from "react";
 import KakImage from "../../assets/Kak.png";
 import { clientUrl } from "../../Constants";
-import { useMyLocationContext } from "../../Context/MyLocationContext";
+//import { useMyLocationContext } from "../../Context/MyLocationContext";
 
 const MainDiv = styled(GlassmorphismDiv)<{ $check: boolean }>`
   border-radius: ${(prop) => (prop.$check ? "30%" : "40%")};
@@ -74,14 +74,20 @@ const StyledKakaoLogin = styled.button<{ $show: boolean }>`
 const Landing = () => {
   const [check, setCheck] = useState(false);
 
-  const { updateCurLocation } = useMyLocationContext();
+  //const { updateCurLocation, setCurLocation } = useMyLocationContext();
 
   const requestLocationAccess = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          console.log("위치 정보 접근 성공");
-          updateCurLocation(position);
+          console.log("위치 정보 접근 성공", position);
+
+          //카카오페이지라는 새로운 페이지로 이동했다가 다시 복귀하는 것이기 때문에, React 어플리케이션 상태가 초기화된다.
+          // updateCurLocation(position);
+          // setCurLocation({
+          //   lat: position.coords.latitude,
+          //   lng: position.coords.longitude,
+          // });
         },
         (error) => {
           console.error("위치 정보 접근 실패", error);

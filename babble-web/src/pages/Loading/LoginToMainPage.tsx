@@ -1,26 +1,34 @@
 import { useEffect } from "react";
 import { kakaoLogin } from "../../API/LoginAPI";
+import { useNavigate } from "react-router-dom";
 
 const LoginToMain = () => {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const getCodeFromUrl = () => {
-            const queryString = window.location.search;
-            const urlParams = new URLSearchParams(queryString);
-            const code = urlParams.get(`code`);
-            return code;
-        };
+  useEffect(() => {
+    const getCodeFromUrl = () => {
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const code = urlParams.get(`code`);
+      return code;
+    };
 
-        const code = getCodeFromUrl();
+    const code = getCodeFromUrl();
+    console.log(code);
 
-        if (code) {
-            kakaoLogin(code);
-        }
-    }, [])
-    
-    return (
-        <div>Wait for a moment...</div>
-    )
-}
+    if (code) {
+      kakaoLogin(code)
+        .then(() => {
+          navigate("/main");
+        })
+        .catch((error) => {
+          console.error("Login failed:", error);
+          navigate("/main"); //일단 메인으로 이동
+        });
+    }
+  }, []);
+
+  return <div>Wait for a moment...</div>;
+};
 
 export default LoginToMain;

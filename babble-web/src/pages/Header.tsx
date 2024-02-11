@@ -1,5 +1,6 @@
 //화면 상단 로고, 날짜, 시간
 import { useState, useEffect } from "react";
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import { GlassmorphismDiv } from "../StyledComponents/gmDiv";
 
@@ -58,13 +59,16 @@ const Header = () => {
   };
 
   return (
-    <StyledHeader>
-      <h1>babble</h1>
-      <div>
-        <p>{formatDate(currentTime)}</p>
-        <p>{formatTime(currentTime)}</p>
-      </div>
-    </StyledHeader>
+    <>
+      <StyledHeader>
+        <h1>babble</h1>
+        <div>
+          <p>{formatDate(currentTime)}</p>
+          <p>{formatTime(currentTime)}</p>
+        </div>
+      </StyledHeader>
+      <Outlet />
+    </>
   );
 };
 

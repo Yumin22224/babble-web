@@ -12,19 +12,19 @@ const hologramBeam = keyframes`
   }
 `;
 
-const StyledChatRoomInfo = styled.div<{ $show: boolean }>`
-  display: ${(prop) => (prop.$show ? "flex" : "none")};
+const StyledChatRoomInfo = styled.div<{ $show: boolean; $expand: boolean }>`
+  display: ${(prop) => (prop.$show && !prop.$expand ? "flex" : "none")};
   flex-direction: column;
-  justify-content:center;
+  justify-content: center;
 
   position: absolute;
   bottom: 50px;
-
   width: 120px;
   height: 150px;
   background-color: transparent;
   color: rgba(12, 46, 242, 1);
   overflow: hidden;
+
 
   &::after {
     content: "";
@@ -46,15 +46,20 @@ const StyledChatRoomInfo = styled.div<{ $show: boolean }>`
 const ChatRoomInfo = ({
   chatRoom,
   isHover,
+  expand,
 }: {
   chatRoom: ChatRoomType;
   isHover: boolean;
+  expand: boolean;
 }) => {
   return (
-    <StyledChatRoomInfo $show={isHover} className="chatRoomInfo">
+    <StyledChatRoomInfo
+      $show={isHover}
+      $expand={expand}
+      className="chatRoomInfo"
+    >
       <div className="hashTag">{chatRoom.hashTag}</div>
       <div className="roomName">{chatRoom.roomName}</div>
-      <div className="memberCount">{chatRoom.memberCount}</div>
     </StyledChatRoomInfo>
   );
 };

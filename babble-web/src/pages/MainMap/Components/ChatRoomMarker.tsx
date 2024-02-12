@@ -2,8 +2,7 @@ import { useState } from "react";
 import styled, { css, keyframes } from "styled-components";
 import { ChatRoomType } from "../../../Constants";
 import ChatRoomInfo from "./ChatRoomInfo";
-
-// eslint-disable-next-line react-refresh/only-export-components
+import { useNavigate } from "react-router-dom";
 
 const toCircle = keyframes`
   from {
@@ -39,7 +38,7 @@ const toSemiCircle = keyframes`
   }
 `;
 
-const StyledChatRoomMarker = styled.div<{ $show: boolean }>`
+const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
   width: 50px;
   height: 30px;
   position: absolute;
@@ -66,12 +65,8 @@ const StyledChatRoomMarker = styled.div<{ $show: boolean }>`
   position: relative;
   opacity: 0.7;
 
-  //   &:hover {
-  //     animation: ${toCircle} 0.5s forwards;
-  //   }
-
-  animation: ${({ $show }) =>
-    $show
+  animation: ${({ $show, $expand }) =>
+    $show || $expand
       ? css`
           ${toCircle} 0.5s forwards
         `
@@ -81,35 +76,56 @@ const StyledChatRoomMarker = styled.div<{ $show: boolean }>`
 `;
 
 export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
+  const navigate = useNavigate();
   const [isHover, setIsHover] = useState(false);
+  const [isExpanding, setIsExpanding] = useState(false);
 
-  const handleMouseEnter = () => setIsHover(true);
+  const handleMouseEnter = () => {
+    setIsHover(true);
+  };
   const handleMouseLeave = () => setIsHover(false);
+
+  const handleClick = () => {
+    setIsExpanding(true);
+    setTimeout(() => {
+        //navigate(`/chat/${chatRoom.id}`); //기존 채팅방 유저
+        navigate(`/enter/${chatRoom.id}`); //새로운 채팅방 유저
+    }, 2000);
+  };
 
   return (
     <MarkerContainer
       id="container"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      $move={isHover}
+      onClick={handleClick}
+      $expand={isExpanding}
+      $show={isHover}
     >
-      <StyledChatRoomMarker className="chatRoomMarker" $show={isHover} />
-      <ChatRoomInfo chatRoom={chatRoom} isHover={isHover} />
+      <StyledChatRoomMarker
+        className="chatRoomMarker"
+        $show={isHover}
+        $expand={isExpanding}
+      />
+      <ChatRoomInfo
+        chatRoom={chatRoom}
+        isHover={isHover}
+        expand={isExpanding}
+      />
     </MarkerContainer>
   );
 };
 
-// MarkerContainer 스타일 컴포넌트
-const MarkerContainer = styled.div<{ $move: boolean }>`
+const MarkerContainer = styled.div<{ $expand: boolean; $show: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor:pointer;
 
   .chatRoomMarker {
     order: 2;
   }
   .chatRoomInfo {
     order: 1;
-  }
 `;

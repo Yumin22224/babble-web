@@ -21,7 +21,7 @@ const MainPage = () => {
   return (
     <StyledMainDiv>
       <ListBtn handleClick={handleClick} />
-      {showList && <ListDiv setShowList={setShowList} />}
+      {showList && <ListDiv/>}
       <MainMap />
     </StyledMainDiv>
   );

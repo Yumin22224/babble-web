@@ -3,7 +3,6 @@ import { useMyLocationContext } from "../../Context/MyLocationContext";
 import { useEffect } from "react";
 import { SampleChatRoomList } from "../../Constants";
 import { ChatRoomMarker } from "./Components/ChatRoomMarker";
-//import { useEffect } from "react";
 
 const MainMap = () => {
   const { curLocation, setCurLocation } = useMyLocationContext();
@@ -23,7 +22,7 @@ const MainMap = () => {
           },
           {
             enableHighAccuracy: true,
-            maximumAge: 5000, // 10초 동안 캐시된 위치 정보 사용 허용
+            maximumAge: 5000, // 5초 동안 캐시된 위치 정보 사용 허용
             timeout: 10000, // 위치 정보를 가져오기 위한 최대 대기 시간(밀리초)
           }
         );

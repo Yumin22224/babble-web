@@ -13,11 +13,7 @@ const StyledListDiv = styled(GlassmorphismDiv)`
   padding: 3vw;
 `;
 
-export const ListDiv = ({
-  setShowList,
-}: {
-  setShowList: (arg: boolean) => void;
-}) => {
+export const ListDiv = () => {
   return (
     <StyledListDiv>
       {SampleChatRoomList.map((chatRoom) => (
@@ -63,7 +59,8 @@ const Box = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
     const navigate = useNavigate();
 
     const handleBoxClick = () => {
-
+      //navigate(`/chat/${chatRoom.id}`); //기존 채팅방 유저
+      navigate(`/enter/${chatRoom.id}`); //새로운 채팅방 유저
     };
 
   return (

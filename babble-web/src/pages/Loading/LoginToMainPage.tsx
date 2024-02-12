@@ -14,13 +14,14 @@ const LoginToMain = () => {
     };
 
     const code = getCodeFromUrl();
-    //console.log(code);
+    console.log(code);
 
     if (code) {
       kakaoLogin(code)
         .then((response) => {
-          console.log("login success");
+          
           localStorage.setItem("accessToken", response.data.accessToken);
+          console.log(localStorage.getItem("accessToken"));
           navigate("/main");
         })
         .catch((error) => {

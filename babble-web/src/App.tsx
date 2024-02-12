@@ -10,6 +10,7 @@ import PrivateRoute from "./pages/PrivateRoute";
 import ChatRoomEnterPage from "./pages/ChatRoom/ChatRoomEnter/ChatRoomEnterPage";
 import ChatRoomPage from "./pages/ChatRoom/ChatRoomPage";
 import { UserContextProivder } from "./Context/UserContext";
+import NewChatRoomPage from "./pages/NewChatRoom/NewChatRoomPage";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
 
             <Route path="/enter/:id" element={<ChatRoomEnterPage />} />
             <Route path="/chat/:id" element={<ChatRoomPage />} />
+            <Route path="/chat/new" element={<NewChatRoomPage/>}/>
           </Route>
         </Routes>
       </MyLocationProvider>

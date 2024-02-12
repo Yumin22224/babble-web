@@ -1,12 +1,14 @@
 import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
 import { useMyLocationContext } from "../../Context/MyLocationContext";
-import { useEffect } from "react";
-import { SampleChatRoomList } from "../../Constants";
+import { useEffect, useState } from "react";
+import { ChatRoomType, SampleChatRoomList } from "../../Constants";
 import { ChatRoomMarker } from "./Components/ChatRoomMarker";
+import { getChatRooms } from "../../API/ChatAPI";
 
 const MainMap = () => {
   const { curLocation, setCurLocation } = useMyLocationContext();
   const { setWatchID } = useMyLocationContext();
+  const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
 
   useEffect(() => {
     const updateCurrentLocation = () => {
@@ -32,7 +34,30 @@ const MainMap = () => {
       }
     };
 
+    async function fetchChatRooms() {
+      try {
+        const fetchedChatRooms = await getChatRooms(curLocation);
+        const transformedChatRooms = fetchedChatRooms.map(
+          (room) => ({
+            id: room.id,
+            roomName: room.name,
+            location: {
+              latitude: room.latitude,
+              longitude: room.longitude,
+            },
+            hashTag: room.hashTag,
+            memberCount: 0, // 멤버 카운트는 무시하고 기본값으로 설정
+          })
+        );
+          setChatRooms(transformedChatRooms);
+          console.log('fetching chat rooms success');
+      } catch (error) {
+        console.error("Fetching chat rooms failed:", error);
+      }
+    }
+
     updateCurrentLocation();
+    fetchChatRooms();
   }, [setCurLocation, setWatchID]);
 
   return (
@@ -43,8 +68,8 @@ const MainMap = () => {
         style={{
           // 지도의 크기
           width: "100vw",
-            height: "100vh",
-          position:"absolute",
+          height: "100vh",
+          position: "absolute",
         }}
         level={2}
         draggable={false}
@@ -62,8 +87,7 @@ const MainMap = () => {
         ))}
         <CustomOverlayMap
           position={{ lat: curLocation.lat, lng: curLocation.lng + 0.0025 }}
-        >
-        </CustomOverlayMap>
+        ></CustomOverlayMap>
       </Map>
     </>
   );

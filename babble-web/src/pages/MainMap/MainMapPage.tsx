@@ -1,65 +1,63 @@
-//import styled from "styled-components";
-import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
-import { useMyLocationContext } from "../../Context/MyLocationContext";
-import { useEffect } from "react";
-import { SampleChatRoomList } from "../../Constants";
-import { ChatRoomMarker } from "./Components/ChatRoomMarker";
+import styled from "styled-components";
+import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
+import MainMap from "./MainMap";
+import { ListDiv } from "./Components/ChatRoomList";
+import { useState } from "react";
 //import { useEffect } from "react";
 
-const MainMap = () => {
-  const { curLocation, setCurLocation } = useMyLocationContext();
-  const { setWatchID } = useMyLocationContext();
+const StyledMainDiv = styled.div`
+  position: relative;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+`;
 
-  useEffect(() => {
-    const updateCurrentLocation = () => {
-      if (navigator.geolocation) {
-        const wId = navigator.geolocation.watchPosition(
-          (position) => {
-            const { latitude, longitude } = position.coords;
-            setCurLocation({ lat: latitude, lng: longitude });
-            console.log("위치 정보 업데이트 성공:", latitude, longitude);
-          },
-          (error) => {
-            console.error("위치 정보 접근 실패:", error);
-          },
-          {
-            enableHighAccuracy: true,
-            maximumAge: 5000, // 10초 동안 캐시된 위치 정보 사용 허용
-            timeout: 10000, // 위치 정보를 가져오기 위한 최대 대기 시간(밀리초)
-          }
-        );
-        setWatchID(wId);
-      } else {
-        console.error("This browser does not support Geolocation.");
-      }
-    };
-
-    updateCurrentLocation();
-  }, [setCurLocation, setWatchID]);
-
+const MainPage = () => {
+  const [showList, setShowList] = useState(false);
+  const handleClick = () => {
+    setShowList(!showList);
+  };
   return (
-    <>
-      <Map
-        id="map"
-        center={curLocation}
-        style={{
-          // 지도의 크기
-          width: "100vw",
-          height: "100vh",
-        }}
-        level={2}
-        draggable={false}
-        zoomable={false}
-      >
-        <MapMarker position={curLocation} />
-        {SampleChatRoomList.map((chatRoom) => (
-            <CustomOverlayMap key={chatRoom.id} position={chatRoom.location} yAnchor={0.7}>
-                <ChatRoomMarker chatRoom={chatRoom}/>
-          </CustomOverlayMap> 
-        ))}
-      </Map>
-    </>
+    <StyledMainDiv>
+      <ListBtn handleClick={handleClick} />
+      {showList && <ListDiv setShowList={setShowList} />}
+      <MainMap />
+    </StyledMainDiv>
   );
 };
 
-export default MainMap;
+export default MainPage;
+
+const StyledListBtn = styled(GlassmorphismDiv)`
+  position: absolute;
+  top: 50%;
+  left: 3%;
+  transform: translateY(-50%);
+  z-index: 100;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  background: rgba(12, 46, 242, 0.1);
+  backdrop-filter: blur(1px);
+  //border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 30%;
+  background-image: url(https://cdn.icon-icons.com/icons2/2385/PNG/512/list_icon_144238.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 25px;
+
+  cursor: pointer;
+  &:hover {
+    box-shadow:
+      0 0 3px #ffffff,
+      0 0 5px #ff00de,
+      0 0 8px #ff00de,
+      0 0 10px #ff00de,
+      0 0 12px #ff00de;
+  }
+`;
+
+const ListBtn = ({ handleClick }: { handleClick: () => void }) => {
+  return <StyledListBtn onClick={handleClick} />;
+};

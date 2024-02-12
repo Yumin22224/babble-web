@@ -5,7 +5,7 @@ import Landing from "./pages/Landing/LandingPage";
 import LoginToMain from "./pages/Loading/LoginToMainPage";
 import { MyLocationProvider } from "./Context/MyLocationContext";
 import Header from "./pages/Header";
-import MainMap from "./pages/MainMap/MainMapPage";
+import MainPage from "./pages/MainMap/MainMapPage";
 import PrivateRoute from "./pages/PrivateRoute";
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
         >
           {/* redirectURI에 인가코드가 그대로 드러나는 이슈 (미해결) */}
           <Route path="/auth/*" element={<LoginToMain />} />
-          <Route path="/main" element={<MainMap />} />
+          <Route path="/main" element={<MainPage />} />
         </Route>
       </Routes>
     </MyLocationProvider>

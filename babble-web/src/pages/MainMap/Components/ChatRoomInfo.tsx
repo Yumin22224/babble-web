@@ -35,7 +35,7 @@ const StyledChatRoomInfo = styled.div<{ $show: boolean }>`
     height: 100%;
     background: linear-gradient(to top, rgba(12, 46, 242, 0.5), transparent);
     clip-path: polygon(0 0, 100% 0, 75% 100%, 25% 100%);
-    animation: ${hologramBeam} 2s forwards;
+    animation: ${hologramBeam} 1s forwards;
   }
 
   div {

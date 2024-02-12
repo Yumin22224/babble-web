@@ -1,21 +1,16 @@
 :root {
   /*색상 변수*/
   /* Color Theme Swatches in Hex */
-  .Jet-AI-1-hex {
-    color: #0c2ff2;
-  }
-  .Jet-AI-2-hex {
-    color: #3552f2;
-  }
-  .Jet-AI-3-hex {
-    color: #576ef2;
-  }
-  .Jet-AI-4-hex {
-    color: #c9d3f2;
-  }
-  .Jet-AI-5-hex {
-    color: #80a6f2;
-  }
+  --1-hex : #0c2ff2;
+  
+  --2-hex: #3552f2;
+  
+  --3-hex: #576ef2;
+  
+  --4-hex : #c9d3f2;
+  
+  --5-hex: #80a6f2;
+  
 
   /* Color Theme Swatches in RGBA */
   .Jet-AI-1-rgba {

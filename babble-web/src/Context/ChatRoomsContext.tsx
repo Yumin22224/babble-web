@@ -41,17 +41,7 @@ export const NewChatRoomProvider = ({ children }: { children: ReactNode }) => {
      async function fetchChatRooms() {
        try {
          const fetchedChatRooms = await getChatRooms(curLocation);
-         const transformedChatRooms = fetchedChatRooms.map((room) => ({
-           id: room.id,
-           roomName: room.name,
-           location: {
-             lat: room.latitude,
-             lng: room.longitude,
-           },
-           hashTag: room.hashTag,
-           memberCount: 0, // 멤버 카운트는 무시하고 기본값으로 설정
-         }));
-         setChatRooms(transformedChatRooms);
+         setChatRooms(fetchedChatRooms);
          console.log("fetching chat rooms success");
        } catch (error) {
          console.error("Fetching chat rooms failed:", error);

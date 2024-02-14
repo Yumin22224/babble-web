@@ -26,6 +26,8 @@ export async function getChatRooms(p: positionType) {
   }
 }
 
+/*-----------------------------------------------------------------------------------*/
+
 type NewChatRoomType = {
   hashTag: string;
   latitude: number;
@@ -50,6 +52,8 @@ export async function makeChatRooms(newRoom: NewChatRoomType) {
   }
 }
 
+/*-----------------------------------------------------------------------------------*/
+
 //특정 채팅방에 입장하며 본인의 참여 여부와 최근 채팅들을 조회한다.
 export async function getRecentChat(
   roomId: number,
@@ -71,6 +75,33 @@ export async function getRecentChat(
     return { chats: [], isChatter: false };
   }
 }
+
+/*
+	
+{
+  "room": {
+    "latitude": 37.5037,
+    "longitude": 127.057315,
+    "id": 1,
+    "name": "관정 파스쿠찌",
+    "hashTag": "카페"
+  },
+  "isChatter": true,
+  "chatterCount": 1,
+  "chats": [
+    {
+      "id": 1,
+      "chatterId": 1,
+      "chatterNickname": "heoyumin",
+      "content": "string",
+      "isMine": true,
+      "createdTimeInSec": 1707913942
+    }
+  ]
+}
+*/
+
+/*-----------------------------------------------------------------------------------*/
 
 type NewChatType = {
   content: string;
@@ -94,6 +125,19 @@ export async function sendChat(newChat: NewChatType, roomId: number) {
   }
 }
 
+/*
+{
+  "id": 1,
+  "chatterId": 1,
+  "chatterNickname": "heoyumin",
+  "content": "string",
+  "isMine": true,
+  "createdTimeInSec": 1707913942
+}
+*/
+
+/*-----------------------------------------------------------------------------------*/
+
 type GetChatType = {
   latestChatId: number;
   location: positionType;
@@ -116,6 +160,23 @@ export async function getChat(getChat: GetChatType, roomId: number) {
     return [];
   }
 }
+
+/*
+{
+  "chats": [
+    {
+      "id": 1,
+      "chatterId": 1,
+      "chatterNickname": "heoyumin",
+      "content": "string",
+      "isMine": true,
+      "createdTimeInSec": 1707913942
+    }
+  ]
+}
+*/
+
+/*-----------------------------------------------------------------------------------*/
 
 type UserInfoType = {
   nickname: string;

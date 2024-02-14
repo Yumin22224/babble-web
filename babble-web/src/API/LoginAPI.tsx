@@ -18,7 +18,7 @@ const SocialKakao = () => {
     kakaoLogin(idToken)
       .then((response) => {
         localStorage.setItem("accessToken", response.data.accessToken);
-        //console.log(localStorage.getItem("accessToken"));
+        console.log(localStorage.getItem("accessToken"));
         navigate("/main");
       })
       .catch((error) => {

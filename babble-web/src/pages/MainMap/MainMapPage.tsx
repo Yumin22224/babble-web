@@ -3,7 +3,14 @@ import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
 import MainMap from "./MainMap";
 import { ListDiv } from "./Components/ChatRoomList";
 import { useEffect, useState } from "react";
-//import { useEffect } from "react";
+import NewChatRoomPage from "../NewChatRoom/NewChatRoomPage";
+
+const StyledMainContainer = styled.div`
+  width: 100%;
+  height: 100vh;
+  //overflow: hidden;
+  background: #000;
+`;
 
 const StyledMainDiv = styled.div`
   position: relative;
@@ -29,7 +36,7 @@ const MainPage = () => {
 
   const handleScroll = () => {
     // 스크롤이 Top에서 50px 이상 내려오면 true값을 useState에 넣어줌
-    if (window.scrollY >= 50) {
+    if (window.scrollY >= 1) {
       setScroll(true);
       console.log(scroll);
     } else {
@@ -38,11 +45,14 @@ const MainPage = () => {
     }
   };
   return (
-    <StyledMainDiv>
-      <ListBtn handleClick={handleClick} />
-      {showList && <ListDiv />}
-      <MainMap />
-    </StyledMainDiv>
+    <StyledMainContainer>
+      <StyledMainDiv>
+        <ListBtn handleClick={handleClick} />
+        {showList && <ListDiv />}
+        <MainMap />
+      </StyledMainDiv>
+      <NewChatRoomPage />
+    </StyledMainContainer>
   );
 };
 

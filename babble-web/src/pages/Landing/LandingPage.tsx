@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
 import { useEffect, useState } from "react";
-import KakImage from "../../assets/Kak.png";
-import { clientUrl } from "../../Constants";
-//import { useMyLocationContext } from "../../Context/MyLocationContext";
+import SocialKakao from "../../API/LoginAPI";
 
 const MainDiv = styled(GlassmorphismDiv)<{ $check: boolean }>`
-  border-radius: ${(prop) => (prop.$check ? "30%" : "40%")};
+  border-radius: ${(prop) => (prop.$check ? "40%/30%" : "40%")};
   transition: border-radius 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const StyledLogoDiv = styled.h1<{ $check: boolean }>`
@@ -40,6 +41,7 @@ const StyledCheckInput = styled.div<{ $check: boolean }>`
     width: calc(0.8rem + 1vw);
     height: calc(0.8rem + 1vw);
     margin: 1vw;
+    background-color: white;
   }
   label {
     order: 1;
@@ -49,32 +51,32 @@ const StyledCheckInput = styled.div<{ $check: boolean }>`
   }
 `;
 
-const StyledKakaoLogin = styled.button<{ $show: boolean }>`
-  all: unset;
+const StyledKakaoLogin = styled.div<{ $show: boolean }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   margin-top: calc(0.5rem + 0.5vw);
   margin-bottom: calc(1rem + 0.5vw);
 
-  background-image: url(${KakImage});
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 100%;
-
   height: ${({ $show }) => ($show ? "calc(2rem + 0.5vw)" : "0")};
-  width: ${({ $show }) => ($show ? "calc(5rem + 0.5vw)" : "0")};
+  width: ${({ $show }) => ($show ? "calc(10rem + 0.5vw)" : "0")};
   padding: ${({ $show }) => ($show ? "calc(0.5rem + 0.5vw)" : "0")};
   opacity: ${({ $show }) => ($show ? 1 : 0)};
   transition:
     width 0.3s ease,
     height 0.3s ease,
     padding 0.3s ease,
-    opacity 0.3s ease;
+    opacity 0.3s ease,
+    visibility 0.3s ease;
+  &,
+  button {
+    ${({ $show }) => !$show && "visibility:hidden"};
+  }
 `;
 
 const Landing = () => {
   const [check, setCheck] = useState(false);
-
-  //const { updateCurLocation, setCurLocation } = useMyLocationContext();
 
   const requestLocationAccess = () => {
     if (navigator.geolocation) {
@@ -107,14 +109,6 @@ const Landing = () => {
     }
   };
 
-  const Rest_api_key = "66e0056e554144467f120b3504e71658";
-  const redirect_uri = clientUrl + "/auth";
-  // oauth 요청 URL
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
-  const handleLogin = () => {
-    window.location.href = kakaoURL;
-  };
-
   //카카오 로그인 페이지에서 뒤로가기 할 경우 버그 (미해결)
   useEffect(() => {
     // 페이지 로드 시 체크박스 상태 확인
@@ -136,7 +130,9 @@ const Landing = () => {
         />
         <label htmlFor="check">위치 정보 수집 동의</label>
       </StyledCheckInput>
-      <StyledKakaoLogin $show={check} onClick={handleLogin} />
+      <StyledKakaoLogin $show={check}>
+        <SocialKakao />
+      </StyledKakaoLogin>
     </MainDiv>
   );
 };

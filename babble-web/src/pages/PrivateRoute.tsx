@@ -3,7 +3,11 @@ import { Navigate } from "react-router-dom";
 
 const PrivateRoute = ({ children }: { children: ReactNode }) => {
   const token = localStorage.getItem("accessToken");
-
+  if (token) {
+    console.log("accessToken yes");
+  } else {
+    console.log("accessToken no");
+  }
   return token ? children : <Navigate to="/login" />;
 };
 

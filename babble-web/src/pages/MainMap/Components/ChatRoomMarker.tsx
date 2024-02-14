@@ -38,10 +38,32 @@ const toSemiCircle = keyframes`
   }
 `;
 
+const moveToCenter = keyframes`
+to {
+    transform:translate(-50%,-50%);
+    //left: 50%; 
+    //top:50%;
+    opacity:1;
+}
+`;
+
+const expandToFullScreen = keyframes`
+  to {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    opacity: 0.1;
+    bottom: 0;
+    left: 0;
+  }
+`;
+
+
 const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
   width: 50px;
   height: 30px;
   position: absolute;
+  //transform: translateX(-50%);
 
   background: rgb(240, 242, 201);
   background: -moz-linear-gradient(
@@ -66,13 +88,20 @@ const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
   opacity: 0.7;
 
   animation: ${({ $show, $expand }) =>
-    $show || $expand
+    $expand
+      ? css`
+          ${moveToCenter} 0.5s forwards,
+          ${expandToFullScreen} 0.5s 0.5s forwards
+        `
+      : $show
       ? css`
           ${toCircle} 0.5s forwards
         `
       : css`
           ${toSemiCircle} 0.5s forwards
         `};
+
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
@@ -88,9 +117,9 @@ export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
   const handleClick = () => {
     setIsExpanding(true);
     setTimeout(() => {
-        //navigate(`/chat/${chatRoom.id}`); //기존 채팅방 유저
-        navigate(`/enter/${chatRoom.id}`); //새로운 채팅방 유저
-    }, 2000);
+      //navigate(`/chat/${chatRoom.id}`); //기존 채팅방 유저
+      navigate(`/enter/${chatRoom.id}`); //새로운 채팅방 유저
+    }, 1000);
   };
 
   return (

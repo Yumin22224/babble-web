@@ -2,6 +2,9 @@ import styled from "styled-components";
 import { GlassmorphismDiv } from "../../../StyledComponents/GmDiv";
 import { ChatRoomType, SampleChatRoomList } from "../../../Constants";
 import { useNavigate } from "react-router-dom";
+import { getChatRooms, getRecentChat } from "../../../API/ChatAPI";
+import { useMyLocationContext } from "../../../Context/MyLocationContext";
+import { useEffect, useState } from "react";
 
 const StyledListDiv = styled(GlassmorphismDiv)`
   position: absolute;
@@ -11,12 +14,39 @@ const StyledListDiv = styled(GlassmorphismDiv)`
   z-index: 1000;
   border-radius: 30%/20%;
   padding: 3vw;
+  overflow-y: auto;
+  overscroll-behavior:contain;
+  height: calc(20rem + 5vh);
 `;
 
 export const ListDiv = () => {
+  const { curLocation } = useMyLocationContext();
+  const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
+  useEffect(() => {
+    async function fetchChatRooms() {
+      try {
+        const fetchedChatRooms = await getChatRooms(curLocation);
+        const transformedChatRooms = fetchedChatRooms.map((room) => ({
+          id: room.id,
+          roomName: room.name,
+          location: {
+            lat: room.latitude,
+            lng: room.longitude,
+          },
+          hashTag: room.hashTag,
+          memberCount: 0, // 멤버 카운트는 무시하고 기본값으로 설정
+        }));
+        setChatRooms(transformedChatRooms);
+        console.log("fetching chat rooms success");
+      } catch (error) {
+        console.error("Fetching chat rooms failed:", error);
+      }
+    }
+    fetchChatRooms();
+  }, []);
   return (
     <StyledListDiv>
-      {SampleChatRoomList.map((chatRoom) => (
+      {chatRooms.map((chatRoom) => (
         <Box chatRoom={chatRoom} />
       ))}
     </StyledListDiv>
@@ -56,12 +86,27 @@ const StyledBox = styled.div`
 `;
 
 const Box = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const { curLocation } = useMyLocationContext();
 
-    const handleBoxClick = () => {
-      //navigate(`/chat/${chatRoom.id}`); //기존 채팅방 유저
-      navigate(`/enter/${chatRoom.id}`); //새로운 채팅방 유저
-    };
+  const handleBoxClick = () => {
+    getRecentChat(chatRoom.id, curLocation.lat, curLocation.lng)
+      .then((res) => {
+        if (res.isChatter) {
+          //기존 채팅방, isChatter가 true인 경우
+          navigate(`/chat/${chatRoom.id}`);
+        } else {
+          //기존 채팅방, isChatter가 false인 경우
+          navigate(`/enter/${chatRoom.id}`);
+        }
+      })
+      .catch((error) => {
+        console.log(
+          "error getting recent chat (getting previous chats)",
+          error
+        );
+      });
+  };
 
   return (
     <StyledBox onClick={handleBoxClick}>

@@ -14,11 +14,11 @@ const SocialKakao = () => {
   const Javascript_api_key = "3d9458a60e9e270c3821f682d91f43c0"; //환경변수로 했더니 브라우저에서 읽지 못하는 에러 (미해결)
   const kakaoOnSuccess = async (data) => {
     const idToken = data.response.access_token;
-    console.log(`idToken from kakao: ${idToken}`);
+    //console.log(`idToken from kakao: ${idToken}`);
     kakaoLogin(idToken)
       .then((response) => {
         localStorage.setItem("accessToken", response.data.accessToken);
-        console.log(localStorage.getItem("accessToken"));
+        //console.log(localStorage.getItem("accessToken"));
         navigate("/main");
       })
       .catch((error) => {

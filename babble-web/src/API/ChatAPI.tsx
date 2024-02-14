@@ -11,7 +11,15 @@ export async function getChatRooms(p: positionType) {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    return res.data.rooms;
+    const rooms = res.data.rooms;
+    const mappedRooms = rooms.map((room) => ({
+      id: room.id,
+      roomName: room.name,
+      location: { lat: room.latitude, lng: room.longitude },
+      hashTag: room.hashTag,
+      memberCount: 0,
+    }));
+    return mappedRooms;
   } catch (err) {
     console.log(err);
     return { rooms: [] };
@@ -35,7 +43,7 @@ export async function makeChatRooms(newRoom: NewChatRoomType) {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    return res.status === 200;
+    return res.status === 201;
   } catch (err) {
     console.log(err);
     return false;
@@ -43,33 +51,90 @@ export async function makeChatRooms(newRoom: NewChatRoomType) {
 }
 
 //특정 채팅방에 입장하며 본인의 참여 여부와 최근 채팅들을 조회한다.
-export async function getRecentChat( roomId:number, latitude:number, longitude:number) {
-    try {
-        const urlWithQuery = baseUrl + `/api/chat/rooms/${roomId}?latitude=${latitude}&longitude=${longitude}`;
-        const res = await axios.get(urlWithQuery, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        return { chats: [] };
-}
+export async function getRecentChat(
+  roomId: number,
+  latitude: number,
+  longitude: number
+) {
+  try {
+    const urlWithQuery =
+      baseUrl +
+      `/api/chat/rooms/${roomId}?latitude=${latitude}&longitude=${longitude}`;
+    const res = await axios.get(urlWithQuery, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return { chats: [], isChatter: false };
+  }
 }
 
+type NewChatType = {
+  content: string;
+  latitude: number;
+  longitude: number;
+};
+
 //본인이 참여 중인 채팅방에서 채팅을 생성한다.
-export async function sendChat(s: string, roomId:number) {
-    try {
-        const url = baseUrl + `/api/chat/rooms/${roomId}/chats`;
-        const res = await axios.post(url, s, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-          },
-        });
-        return res.data;
-    } catch (err) {
-        console.log(err);
-        return false;
-    }
+export async function sendChat(newChat: NewChatType, roomId: number) {
+  try {
+    const url = baseUrl + `/api/chat/rooms/${roomId}/chats`;
+    const res = await axios.post(url, newChat, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
+type GetChatType = {
+  latestChatId: number;
+  location: positionType;
+};
+
+//가장 최근에 조회한 채팅을 기준으로 그 이후에 생성된 모든 채팅을 조회한다.
+export async function getChat(getChat: GetChatType, roomId: number) {
+  try {
+    const url =
+      baseUrl +
+      `/api/chat/rooms/${roomId}?latestChatId=${getChat.latestChatId}&latitude=${getChat.location.lat}&longitude=${getChat.location.lng}`;
+    const res = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return res.data.chats;
+  } catch (err) {
+    console.log("Error getting chats", err);
+    return [];
+  }
+}
+
+type UserInfoType = {
+  nickname: string;
+  latitude: number;
+  longitude: number;
+};
+
+//채팅방에 참여한다.
+export async function joinChat(userInfo: UserInfoType, roomId: number) {
+  try {
+    const url = baseUrl + `/api/chat/rooms/${roomId}/chatters`;
+    const res = await axios.post(url, userInfo, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return res.data;
+  } catch (err) {
+    console.log("Error joining chat room", err);
+    return { id: 0, nickname: "" };
+  }
 }

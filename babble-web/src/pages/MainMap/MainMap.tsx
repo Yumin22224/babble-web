@@ -42,8 +42,8 @@ const MainMap = () => {
             id: room.id,
             roomName: room.name,
             location: {
-              latitude: room.latitude,
-              longitude: room.longitude,
+              lat: room.latitude,
+              lng: room.longitude,
             },
             hashTag: room.hashTag,
             memberCount: 0, // 멤버 카운트는 무시하고 기본값으로 설정
@@ -76,7 +76,7 @@ const MainMap = () => {
         zoomable={false}
       >
         <MapMarker position={curLocation} />
-        {SampleChatRoomList.map((chatRoom) => (
+        {chatRooms.map((chatRoom) => (
           <CustomOverlayMap
             key={chatRoom.id}
             position={chatRoom.location}

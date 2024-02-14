@@ -25,7 +25,6 @@ const StyledChatRoomInfo = styled.div<{ $show: boolean; $expand: boolean }>`
   color: rgba(12, 46, 242, 1);
   overflow: hidden;
 
-
   &::after {
     content: "";
     position: absolute;
@@ -40,6 +39,10 @@ const StyledChatRoomInfo = styled.div<{ $show: boolean; $expand: boolean }>`
 
   div {
     font-weight: 600;
+  }
+  .roomName {
+    word-break: break-all;
+    white-space: pre-wrap;
   }
 `;
 

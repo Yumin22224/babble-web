@@ -4,8 +4,9 @@ import { useState } from "react";
 import { StyledButton } from "../../StyledComponents/Button";
 import { useMyLocationContext } from "../../Context/MyLocationContext";
 import { useContext } from "react";
-import { NewChatRoomContext } from "../../Context/NewChatRoomContext";
+import { NewChatRoomContext } from "../../Context/ChatRoomsContext";
 import { useNavigate } from "react-router-dom";
+import { Wrapper } from "../../StyledComponents/Wrapper";
 
 const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
   width: calc(6vw + 24em);
@@ -69,13 +70,13 @@ const tagGuide = [
     engTag: "LECTURE_ROOM",
   },
   {
-    tag: "학식 식당",
+    tag: "학생 식당",
     guide: "식당 이름을 입력해주세요",
     example: "학생회관 식당, 자하연 식당, ...",
     engTag: "CAFETERIA",
   },
   {
-    tag: "교내 식당",
+    tag: "식당",
     guide: "식당 이름을 입력해주세요",
     example: "포포인, BBQ, ...",
     engTag: "RESTAURANT",
@@ -118,7 +119,7 @@ const NewChatRoomPage = () => {
     );
   }
 
-  const { setRoomSpec } = context;
+  const { setRoomSpec, setTag } = context;
 
   const handleTagClick = (index: number) => {
     setSelectedTag(index);
@@ -135,37 +136,40 @@ const NewChatRoomPage = () => {
       longitude: curLocation.lng,
       roomName: roomName,
     };
-      setRoomSpec(newRoom);
-      navigate(`/enter/-100`);
+    setRoomSpec(newRoom);
+    setTag(tagGuide[selectedTag].tag);
+    navigate(`/enter/-100`);
   };
 
   return (
-    <StyledNewChatRoomDiv>
-      <h1>새로운 채팅방 개설</h1>
-      <div className="tagTitle">태그를 선택해주세요</div>
-      <div className="tagContainer">
-        {tagGuide.map((tag, index) => (
-          <StyledTag
-            key={index}
-            className={`tag ${selectedTag === index ? "selected" : ""}`}
-            onClick={() => handleTagClick(index)}
-            $selected={selectedTag === index}
-          >
-            {tag.tag}
-          </StyledTag>
-        ))}
-      </div>
-      <label htmlFor="roomTitle">{tagGuide[selectedTag].guide}</label>
-      <input
-        type="text"
-        id="roomTitle"
-        onChange={handleChange}
-        placeholder={tagGuide[selectedTag].example}
-      />
-      <StyledButton className="createRoom" onClick={() => handleCreateClick}>
-        생성
-      </StyledButton>
-    </StyledNewChatRoomDiv>
+    <Wrapper>
+      <StyledNewChatRoomDiv>
+        <h1>새로운 채팅방 개설</h1>
+        <div className="tagTitle">태그를 선택해주세요</div>
+        <div className="tagContainer">
+          {tagGuide.map((tag, index) => (
+            <StyledTag
+              key={index}
+              className={`tag ${selectedTag === index ? "selected" : ""}`}
+              onClick={() => handleTagClick(index)}
+              $selected={selectedTag === index}
+            >
+              {tag.tag}
+            </StyledTag>
+          ))}
+        </div>
+        <label htmlFor="roomTitle">{tagGuide[selectedTag].guide}</label>
+        <input
+          type="text"
+          id="roomTitle"
+          onChange={handleChange}
+          placeholder={tagGuide[selectedTag].example}
+        />
+        <StyledButton className="createRoom" onClick={handleCreateClick}>
+          생성
+        </StyledButton>
+      </StyledNewChatRoomDiv>
+    </Wrapper>
   );
 };
 

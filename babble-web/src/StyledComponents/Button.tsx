@@ -8,4 +8,5 @@ export const StyledButton = styled(GlassmorphismDiv)`
   height: calc(0.5em + 1vw);
   vertical-align: middle;
   line-height: 1;
+  cursor: pointer;
 `;

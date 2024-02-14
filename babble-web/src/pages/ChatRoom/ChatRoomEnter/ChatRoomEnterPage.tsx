@@ -1,13 +1,14 @@
 import styled, { keyframes } from "styled-components";
 import { GlassmorphismDiv } from "../../../StyledComponents/GmDiv";
 import { useNavigate, useParams } from "react-router-dom";
-import { SampleChatRoomList } from "../../../Constants";
+//import { SampleChatRoomList } from "../../../Constants";
 import { ColorType, useUserContext } from "../../../Context/UserContext";
 import { StyledButton } from "../../../StyledComponents/Button";
 import { useContext } from "react";
-import { NewChatRoomContext } from "../../../Context/NewChatRoomContext";
-import { makeChatRooms } from "../../../API/ChatAPI";
-
+import { NewChatRoomContext } from "../../../Context/ChatRoomsContext";
+import { getChatRooms, joinChat, makeChatRooms } from "../../../API/ChatAPI";
+import { useMyLocationContext } from "../../../Context/MyLocationContext";
+import { useEffect } from "react";
 
 const generateColor = (nickname: string) => {
   let hash = 0;
@@ -40,7 +41,7 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{ $color: ColorType }>`
   height: calc(5vw + 15em);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background-color: ${({ $color }) =>
     `rgba(${$color.r}, ${$color.g}, ${$color.b}, 0.1)`};
@@ -49,32 +50,42 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{ $color: ColorType }>`
   animation: ${fadeIn} 1s forwards;
 
   .chatRoomInfo {
-    height: 6vw;
     align-self: stretch;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 2fr;
     align-items: center;
-    justify-content: space-evenly;
+    justify-content: center;
     border: 1px solid;
     border-radius: 10% / 40%;
   }
 
   .roomName {
+    grid-column: 1/3;
+    grid-row: 2/3;
     font-weight: 600;
     font-size: x-large;
-    margin-left: 1.4vw;
+    margin: 0;
   }
   .memberCount {
-    margin: 1vw 1.5vw 1vw 2vw;
+    grid-column: 2/3;
+    grid-row: 1/2;
+
+    //margin: 1vw 1.5vw 1vw 2vw;
+    margin-top: 0.3vw;
   }
   .hashTag {
-    margin: 1vw 1.5vw 1vw 2vw;
+    grid-column: 1/2;
+    grid-row: 1/2;
+
+    //margin: 1vw 1.5vw 1vw 2vw;
+    margin-top: 0.3vw;
   }
 
   label {
     font-size: 1.5em;
     font-weight: 600;
-    margin: 3vw 0;
+    margin: 2vw 0 0.5vw 0;
   }
 
   input {
@@ -86,8 +97,8 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{ $color: ColorType }>`
     background-color: ${({ $color }) =>
       `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
   }
-  button {
-    margin-top: 3vw;
+  .enter {
+    margin-top: 2vw;
   }
 `;
 
@@ -101,13 +112,14 @@ const ChatRoomEnterPage = () => {
       "useContext(NewChatRoomContext) must be inside a Provider with a value"
     );
   }
-  const { roomSpec } = context;
+  const { roomSpec, chatRooms, setChatRooms, tag } = context;
 
   const { setNickName, color, setColor, nickName } = useUserContext();
+  const { curLocation } = useMyLocationContext();
 
   const curChatRoom =
     chatRoomId !== -100
-      ? SampleChatRoomList.find((chatRoom) => chatRoom.id === chatRoomId)
+      ? chatRooms.find((chatRoom) => chatRoom.id === chatRoomId)
       : { ...roomSpec, memberCount: 0 };
 
   const handleChange = (e: { target: { value: string } }) => {
@@ -118,12 +130,28 @@ const ChatRoomEnterPage = () => {
 
   const handleEnter = () => {
     if (chatRoomId !== -100) {
-      navigate(`/chat/${curChatRoom!.id}`); //기존 채팅방 유저
+      //기존 채팅방, isChatter가 false인 경우
+      joinChat(
+        {
+          nickname: nickName,
+          latitude: curLocation.lat,
+          longitude: curLocation.lng,
+        },
+        chatRoomId
+      )
+        .then(() => {
+          navigate(`/chat/${chatRoomId}`);
+        })
+        .catch((error) => {
+          console.log("Error joining as a new user", error);
+        });
     } else {
+      //새 채팅방
       const newRoom = { ...roomSpec, nickname: nickName };
       makeChatRooms(newRoom)
         .then((res) => {
-          navigate(`/chat/${res && 200}`);
+          navigate(`/chat/${res}`);
+          console.log(roomSpec);
         })
         .catch((error) => {
           console.log("Creating new chat room failed:", error);
@@ -132,12 +160,21 @@ const ChatRoomEnterPage = () => {
     }
   };
 
+  useEffect(() => {
+    setColor({ r: 12, g: 46, b: 242 });
+    getChatRooms(curLocation).then(setChatRooms);
+  }, [setChatRooms, setColor]);
+
   return (
     <StyledChatRoomEnterDiv $color={color}>
       <div className="chatRoomInfo">
-        <div className="roomName">{curChatRoom!.roomName}</div>
-        <div className="hashTag">{curChatRoom!.hashTag}</div>
-        <div className="memberCount">{curChatRoom!.memberCount}</div>
+        <p className="roomName">{curChatRoom!.roomName}</p>
+        <div className="hashTag">
+          {chatRoomId !== -100 ? curChatRoom!.hashTag : tag}
+        </div>
+        <div className="memberCount">
+          {chatRoomId !== -100 && curChatRoom!.memberCount}
+        </div>
       </div>
       <label htmlFor="nickName">닉네임을 입력해주세요</label>
       <input id="nickName" type="text" onChange={handleChange} />

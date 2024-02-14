@@ -10,7 +10,7 @@ import ChatRoomEnterPage from "./pages/ChatRoom/ChatRoomEnter/ChatRoomEnterPage"
 import ChatRoomPage from "./pages/ChatRoom/ChatRoomPage";
 import { UserContextProivder } from "./Context/UserContext";
 import NewChatRoomPage from "./pages/NewChatRoom/NewChatRoomPage";
-import { NewChatRoomProvider } from "./Context/NewChatRoomContext";
+import { NewChatRoomProvider } from "./Context/ChatRoomsContext";
 
 function App() {
   return (

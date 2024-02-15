@@ -138,7 +138,7 @@ const NewChatRoomPage = () => {
     };
     setRoomSpec(newRoom);
     setTag(tagGuide[selectedTag].tag);
-    navigate(`/enter/-100`);
+    navigate(`/enter/0`);
   };
 
   return (

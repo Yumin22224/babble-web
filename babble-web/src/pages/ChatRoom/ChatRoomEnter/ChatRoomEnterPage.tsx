@@ -9,9 +9,7 @@ import { NewChatRoomContext } from "../../../Context/ChatRoomsContext";
 import { getChatRooms, joinChat, makeChatRooms } from "../../../API/ChatAPI";
 import { useMyLocationContext } from "../../../Context/MyLocationContext";
 import { useEffect } from "react";
-import { generateColor } from "../../../API/GenerateColor";
-
-
+import { generateColor, invertColor } from "../../../API/GenerateColor";
 
 //처음에 페이지로 이동할 때 효과를 주고 싶은데 전혀 나타나질 않는다... (미해결)
 const fadeIn = keyframes` {
@@ -23,15 +21,18 @@ const fadeIn = keyframes` {
     }
   }`;
 
-const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{ $color: ColorType }>`
+const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{
+  $color: ColorType;
+  $invColor: ColorType;
+}>`
   width: calc(5vw + 15em);
   height: calc(5vw + 15em);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: ${({ $color }) =>
-    `rgba(${$color.r}, ${$color.g}, ${$color.b}, 0.1)`};
+  background-color: ${({ $invColor }) =>
+    `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 0.3)`};
   color: ${({ $color }) => `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
 
   animation: ${fadeIn} 1s forwards;
@@ -77,12 +78,12 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{ $color: ColorType }>`
 
   input {
     all: unset;
-    color: white;
+    //color: white;
     align-self: stretch;
     height: 5vw;
     border-radius: 10% / 50%;
-    background-color: ${({ $color }) =>
-      `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
+    background-color: ${({ $invColor }) =>
+      `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 0.7)`};
   }
   .enter {
     margin-top: 2vw;
@@ -102,6 +103,7 @@ const ChatRoomEnterPage = () => {
   const { roomSpec, chatRooms, setChatRooms, tag } = context;
 
   const { setNickName, color, setColor, nickName } = useUserContext();
+  const invColor = invertColor(color);
   const { curLocation } = useMyLocationContext();
 
   const curChatRoom =
@@ -137,8 +139,13 @@ const ChatRoomEnterPage = () => {
       const newRoom = { ...roomSpec, nickname: nickName };
       makeChatRooms(newRoom)
         .then((res) => {
-          navigate(`/chat/${res}`);
-          console.log(roomSpec);
+          if (res) {
+            const locationHeader = res.headers["location"];
+            console.log("Location Header:", locationHeader);
+            const id = locationHeader.split("/").pop();
+            navigate(`/chat/${id}`);
+            console.log(roomSpec);
+          }
         })
         .catch((error) => {
           console.log("Creating new chat room failed:", error);
@@ -153,7 +160,7 @@ const ChatRoomEnterPage = () => {
   }, [setChatRooms, setColor]);
 
   return (
-    <StyledChatRoomEnterDiv $color={color}>
+    <StyledChatRoomEnterDiv $color={color} $invColor={invColor}>
       <div className="chatRoomInfo">
         <p className="roomName">{curChatRoom!.roomName}</p>
         <div className="hashTag">

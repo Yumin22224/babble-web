@@ -15,8 +15,16 @@ const StyledListDiv = styled(GlassmorphismDiv)`
   border-radius: 30%/20%;
   padding: 3vw;
   overflow-y: auto;
-  overscroll-behavior:contain;
+  overscroll-behavior: contain;
   height: calc(20rem + 5vh);
+
+  // 웹킷 기반 브라우저를 위한 스타일
+  &::-webkit-scrollbar {
+    width: 0; 
+  }
+
+  // Firefox를 위한 스타일
+  scrollbar-width: none; 
 `;
 
 export const ListDiv = () => {

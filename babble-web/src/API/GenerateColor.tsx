@@ -13,3 +13,18 @@ export const generateColor = (nickname: string) => {
 
   return { r: r, g: g, b: b };
 };
+
+export const invertColor = ({
+  r,
+  g,
+  b,
+}: {
+  r: number;
+  g: number;
+  b: number;
+}) => {
+  const invR = 255 - r;
+  const invG = 255 - g;
+  const invB = 255 - b;
+  return { r: invR, g: invG, b: invB };
+};

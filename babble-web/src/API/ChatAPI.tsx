@@ -45,7 +45,7 @@ export async function makeChatRooms(newRoom: NewChatRoomType) {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    return res.status === 201;
+    return res;
   } catch (err) {
     console.log(err);
     return false;

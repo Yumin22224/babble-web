@@ -1,7 +1,7 @@
 //화면 상단 로고, 날짜, 시간
 import { useState, useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import styled, { css } from "styled-components";
 import { GlassmorphismDiv } from "../StyledComponents/GmDiv";
 
 const StyledHeader = styled(GlassmorphismDiv)`
@@ -41,11 +41,25 @@ const StyledHeader = styled(GlassmorphismDiv)`
   div {
     margin: 10px 0;
   }
+
+  ${(props) =>
+    props.isChatRoute &&
+    css`
+      background: transparent;
+      backdrop-filter: none;
+      top: 1vw; // 위치 변경
+      left: 13%; // 위치 변경
+      transform: translateX(-50%) scale(0.6); // 크기 및 위치 조정
+      border: none;
+    `}
+  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 const Header = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const navigate = useNavigate();
+  const location = useLocation();
+  const isChatRoute = location.pathname.startsWith("/chat/");
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -73,7 +87,7 @@ const Header = () => {
 
   return (
     <>
-      <StyledHeader>
+      <StyledHeader isChatRoute={isChatRoute}>
         <h1 onClick={() => navigate(`/main`)}>babble</h1>
         <div>
           <p>{formatDate(currentTime)}</p>

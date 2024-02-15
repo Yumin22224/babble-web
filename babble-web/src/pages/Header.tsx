@@ -4,7 +4,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { GlassmorphismDiv } from "../StyledComponents/GmDiv";
 
-const StyledHeader = styled(GlassmorphismDiv)`
+const StyledHeader = styled(GlassmorphismDiv)<{ $isChatRoute: boolean }>`
   position: fixed;
   top: 1vw;
   left: 5vw;
@@ -43,16 +43,49 @@ const StyledHeader = styled(GlassmorphismDiv)`
   }
 
   ${(props) =>
-    props.isChatRoute &&
-    css`
-      background: transparent;
-      backdrop-filter: none;
-      top: 1vw; // 위치 변경
-      left: 13%; // 위치 변경
-      transform: translateX(-50%) scale(0.6); // 크기 및 위치 조정
-      border: none;
-    `}
-  transition: all 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+    props.$isChatRoute
+      ? css`
+          background: transparent;
+          backdrop-filter: none;
+          top: 1vw; // 위치 변경
+          left: 13%; // 위치 변경
+          transform: translateX(-50%) scale(0.6); // 크기 및 위치 조정
+          border: none;
+
+          @media screen and (max-width: 905px) {
+            background: transparent;
+            backdrop-filter: none;
+            box-shadow: none;
+            top: -1%;
+            left: 70%;
+            div {
+              display: none;
+            }
+          }
+          @media screen and (max-width: 450px) {
+            background: transparent;
+            backdrop-filter: none;
+            box-shadow: none;
+            top: calc(1rem + 1vh);
+            left: 80%;
+            div {
+              display: none;
+            }
+          }
+        `
+      : css`
+          @media screen and (max-width: 400px) {
+            border-radius: 60% / 60%;
+            top: 1vh;
+            left: 1vw;
+            transform: scale(0.7);
+            div {
+              display: none;
+            }
+          }
+        `}
+
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 const Header = () => {
@@ -87,7 +120,7 @@ const Header = () => {
 
   return (
     <>
-      <StyledHeader isChatRoute={isChatRoute}>
+      <StyledHeader $isChatRoute={isChatRoute}>
         <h1 onClick={() => navigate(`/main`)}>babble</h1>
         <div>
           <p>{formatDate(currentTime)}</p>

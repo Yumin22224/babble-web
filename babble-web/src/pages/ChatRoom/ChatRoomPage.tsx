@@ -17,15 +17,22 @@ import Chat, { ChatType } from "./Components/Chat";
 import { ColorType, useUserContext } from "../../Context/UserContext";
 import SendIcon from "./Components/SendIcon";
 import { invertColor } from "../../API/GenerateColor";
+import squaredPaper from "../../assets/squaredPaper.jpeg";
+//import linePaper from "../../assets/linePaper.jpg";
 
 const StyledChatRoomDiv = styled(GlassmorphismDiv)`
   display: grid;
   border-radius: 0;
   border: none;
   padding: 0;
-
+  background-image: url(${squaredPaper});
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  backdrop-filter: brightness(10%);
+  color: #040159;
   .chatWrapper {
-    padding: 0 4vw 1vw 4vw;
+    padding-bottom: 1vh;
   }
 `;
 
@@ -33,17 +40,43 @@ const StyledChatRoomInfo = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  border: 1px solid;
-  //border-radius: 15%/100%;
+  position: relative;
+  //border-bottom: 1px solid;
+
   div {
-    margin: 0 1vw;
     background-color: white;
-    border-radius: 35% 35% 0% 0% / 60% 60% 0% 0%;
+    border-radius: 30% 30% 0% 0% / 40% 40% 0% 0%;
+    padding: calc(0.5rem + 0.5vw);
+    position: relative;
+    box-shadow: 3px 0px 5px -3px rgba(0, 0, 0, 0.5);
   }
-  height: 5vw;
+  .roomName {
+    background-color: var(--4-hex);
+    z-index: 100;
+    margin-right: -10px;
+  }
+  .tag {
+    background-color: var(--3-hex);
+    z-index: 50;
+    min-width: calc(3rem + 1vw);
+    margin-right: -10px;
+  }
+  .memberCount {
+    background-color: var(--5-hex);
+    z-index: 10;
+    min-width: calc(2rem + 1vw);
+  }
+  //height: 5vh;
 `;
 
-const StyledDateDiv = styled.div``;
+const StyledDateDiv = styled.div`
+  z-index: 200;
+  height: calc(2rem + 1vh);
+  line-height: 2.5;
+  font-weight: 600;
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+`;
 
 const StyledChatsDiv = styled.div`
   display: flex;
@@ -62,26 +95,41 @@ const StyledChatsDiv = styled.div`
 `;
 
 const StyledSendDiv = styled.div<{ $color: ColorType; $invColor: ColorType }>`
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 2fr;
   justify-content: space-between;
   align-items: center;
+  background-color: ${({ $invColor }) =>
+    `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
 
   input {
+    grid-row: 1/2;
+    grid-column: 1/2;
     display: block;
     justify-self: stretch;
-    width: 40vw;
-    height: 10vw;
-    all: unset;
+    max-width: calc(23.5rem + 5vw);
+    height: calc(3rem + 1vh);
+
+    font-size: 1.3em;
+
+    border: none;
     background-color: ${({ $color }) =>
       `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
     color: ${({ $invColor }) =>
       `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
   }
+  input::placeholder {
+    font-size: 1.5em;
+    margin-top: 1vw;
+  }
 
   .send {
-    height: 20px;
-    margin-right: 1vw;
+    grid-row: 1/2;
+    grid-column: 2/3;
+    height: 30px;
+    margin: 0 calc(0.3rem + 0.25vw) 0 calc(0.3rem + 0.25vw);
+    cursor: pointer;
   }
 `;
 
@@ -130,6 +178,7 @@ const ChatRoomPage = () => {
           console.log("No room found with ID:", chatRoomId);
           alert("해당 채팅방은 존재하지 않습니다.");
           navigate(`/main`);
+          return;
         }
 
         if (foundRoom) {
@@ -142,15 +191,19 @@ const ChatRoomPage = () => {
 
           setChats(chatsResponse.chats);
 
-          const date = new Date(chatsResponse.chats[0].createdTimeInSec * 1000);
-          setLastChatDate({
-            year: date.getFullYear(),
-            month: date.getMonth() + 1,
-            day: date.getDate(),
-          });
+          if (chatsResponse.chats.length > 0) {
+            const date = new Date(
+              chatsResponse.chats[0].createdTimeInSec * 1000
+            );
+            setLastChatDate({
+              year: date.getFullYear(),
+              month: date.getMonth() + 1,
+              day: date.getDate(),
+            });
+          }
         }
       } catch (error) {
-        console.error("Fetching chats failed:", error);
+        console.error("Fetching failed:", error);
         alert("다시 로그인 해주세요.");
         navigate(`/login`);
       }
@@ -162,31 +215,34 @@ const ChatRoomPage = () => {
 
   const handleChange = (e) => {
     setChatContent(e.target.value);
-    console.log(chatContent);
   };
 
   const handleSend = () => {
-    setChatContent("");
-    sendChat(
-      {
-        content: chatContent,
-        latitude: curLocation.lat,
-        longitude: curLocation.lng,
-      },
-      chatRoomId
-    )
-      .then((res) => {
-        getChat({ latestChatId: res.id, location: curLocation }, chatRoomId)
-          .then((res) => {
-            setChats(res);
-          })
-          .catch((err) => {
-            console.log("Fetching chats failed:", err);
-          });
-      })
-      .catch((err) => {
-        console.log("Sending chat failed:", err);
-      });
+    if (chatContent.length > 0) {
+      sendChat(
+        {
+          content: chatContent,
+          latitude: curLocation.lat,
+          longitude: curLocation.lng,
+        },
+        chatRoomId
+      )
+        .then((res) => {
+          getChat({ latestChatId: res.id, location: curLocation }, chatRoomId)
+            .then((res) => {
+              setChats(res);
+            })
+            .catch((err) => {
+              console.log("Fetching chats failed:", err);
+            });
+        })
+        .catch((err) => {
+          console.log("Sending chat failed:", err);
+        });
+      setChatContent("");
+    } else {
+      alert("채팅을 입력해주세요.");
+    }
   };
 
   //-------------------------------------------------------------------------//
@@ -201,7 +257,11 @@ const ChatRoomPage = () => {
             <div className="memberCount">{chatterCnt}</div>
           </StyledChatRoomInfo>
 
-          <StyledDateDiv>{`${lastChatDate.year}년 ${lastChatDate.month}월 ${lastChatDate.day}일`}</StyledDateDiv>
+          <StyledDateDiv>
+            {lastChatDate.year !== 0
+              ? `${lastChatDate.year}년 ${lastChatDate.month}월 ${lastChatDate.day}일`
+              : "Too Quiet..."}
+          </StyledDateDiv>
           <div className="chatWrapper">
             <StyledChatsDiv>
               {chats.map((chat, index) => (
@@ -215,13 +275,14 @@ const ChatRoomPage = () => {
             $invColor={invColor}
           >
             <input
+              id="sendConent"
               className="content"
               placeholder="Send Message"
               onChange={handleChange}
               value={chatContent}
             />
             <div className="send" onClick={handleSend}>
-              <SendIcon width="20px" height="20px" color={color} />
+              <SendIcon width="30px" height="30px" color={color} />
             </div>
           </StyledSendDiv>
         </StyledChatRoomDiv>

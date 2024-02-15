@@ -18,6 +18,8 @@ const StyledChatContainer = styled.div<{ $isMine: boolean }>`
   justify-content: ${($isMine) => ($isMine ? "flex-end" : "flex-start")};
   align-items: flex-end;
   margin: 1vw 0;
+  padding: 0 calc(2.2rem + 1vw);
+  min-width: calc(20rem + 5vw);
 
   ${($isMine) =>
     $isMine &&
@@ -33,13 +35,15 @@ const StyledChat = styled.div<{
   $invColor: { r: number; g: number; b: number };
 }>`
   background-color: ${({ $color }) =>
-    `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
+    `rgba(${$color.r}, ${$color.g}, ${$color.b}, 0.9)`};
   color: ${({ $invColor }) =>
-        `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
-    
-    padding: 0 1vw;
-    max-width: 30vw;
-    text-align:left;
+    `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
+text-shadow:
+        0.5px 0.5px 0.5px #fff;
+
+  padding: 0 1vh;
+  max-width: calc(17rem + 5vw);
+  text-align: left;
 `;
 
 const StyledDate = styled.div<{ $isMine: boolean }>`

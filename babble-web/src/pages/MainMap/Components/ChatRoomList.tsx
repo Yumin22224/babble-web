@@ -12,7 +12,8 @@ const StyledListDiv = styled(GlassmorphismDiv)`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1000;
-  border-radius: 30%/20%;
+  border-radius: 20%;
+  min-width:calc(15rem + 5vw);
   padding: 3vw;
   overflow-y: auto;
   overscroll-behavior: contain;
@@ -63,7 +64,7 @@ const StyledBox = styled.div`
   margin: 1vw;
   padding: 1vw;
 
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 10% /20%;
   background: rgba(255, 255, 255, 0.3);
 
@@ -72,15 +73,11 @@ const StyledBox = styled.div`
     grid-row: 1/2;
     //margin: 1vw 0 0 1vw;
   }
-  .memberCount {
-    grid-column: 2/3;
-    grid-row: 1/2;
-    //margin: 0.5vw;
-  }
   .roomName {
     grid-column: 1/4;
     grid-row: 2/3;
     font-weight: 600;
+    line-height:1.7;
   }
 `;
 
@@ -110,7 +107,6 @@ const Box = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
   return (
     <StyledBox onClick={handleBoxClick}>
       <div className="hashTag">{chatRoom.hashTag}</div>
-      <div className="memberCount">{chatRoom.memberCount}</div>
       <div className="roomName">{chatRoom.roomName}</div>
     </StyledBox>
   );

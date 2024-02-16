@@ -145,8 +145,7 @@ const StyledSendDiv = styled.div<{ $color: ColorType; $invColor: ColorType }>`
     position: absolute;
     display: flex;
     flex-direction: column;
-    top: calc(4rem + 3vh);
-    left: calc(-40vw - 2rem);
+    transform: translate(calc(-22rem - 10vw), calc(7vh + 2rem));
   }
   textarea.expand {
     height: calc(30rem + 5vh);
@@ -258,8 +257,14 @@ const ChatRoomPage = () => {
     const textarea = textareaRef.current;
     if (!textarea) return;
 
-    const hasScrollbar = textarea.scrollHeight > textarea.clientHeight;
-    setIsExpanded(hasScrollbar);
+    if (!isExpanded) {
+      const hasScrollbar = textarea.scrollHeight > textarea.clientHeight;
+      setIsExpanded(hasScrollbar);
+    } else {
+      if (contents.length < 120) {
+        setIsExpanded(false);
+      }
+    }
   };
 
   //   useEffect(() => {

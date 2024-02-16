@@ -1,4 +1,5 @@
 import { positionType } from "./Context/MyLocationContext";
+import { ChatType } from "./pages/ChatRoom/Components/Chat";
 
 export const baseUrl = "http://localhost:8080";
 
@@ -33,5 +34,33 @@ export const SampleChatRoomList: ChatRoomType[] = [
     location: { lat: 37.5023, lng: 127.0578 },
     hashTag: "도서관",
     memberCount: 30,
+  },
+];
+
+export const SampleChats: ChatType[] = [
+  {
+    id: 3,
+    chatterId: 1,
+    chatterNickname: "yeah",
+    content:
+      "hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah",
+    isMine: false,
+    createdTimeInSec: 1707914950,
+  },
+  {
+    id: 2,
+    chatterId: 2,
+    chatterNickname: "nooo",
+    content: "hi my name is nooo",
+    isMine: true,
+    createdTimeInSec: 1707914950,
+  },
+  {
+    id: 1,
+    chatterId: 1,
+    chatterNickname: "yeah",
+    content: "hi my name is yeah",
+    isMine: false,
+    createdTimeInSec: 1707913942,
   },
 ];

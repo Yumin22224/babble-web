@@ -12,22 +12,18 @@ export type ChatType = {
   createdTimeInSec: number;
 };
 
-const StyledChatContainer = styled.div<{ $isMine: boolean }>`
+const StyledChatContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: ${($isMine) => ($isMine ? "flex-end" : "flex-start")};
+  justify-content: flex-start;
   align-items: flex-end;
   margin: 1vw 0;
   padding: 0 calc(2.2rem + 1vw);
   min-width: calc(20rem + 5vw);
 
-  ${($isMine) =>
-    $isMine &&
-    css`
-      .chat {
-        order: 2;
-      }
-    `}
+  &.isMine {
+    justify-content: flex-end;
+  }
 `;
 
 const StyledChat = styled.div<{
@@ -38,12 +34,19 @@ const StyledChat = styled.div<{
     `rgba(${$color.r}, ${$color.g}, ${$color.b}, 0.9)`};
   color: ${({ $invColor }) =>
     `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
-text-shadow:
-        0.5px 0.5px 0.5px #fff;
+  text-shadow: 0.5px 0.5px 0.5px #fff;
 
   padding: 0 1vh;
   max-width: calc(17rem + 5vw);
   text-align: left;
+
+  &.isMine {
+    order: 2;
+  }
+
+  word-break: keep-all;
+  word-wrap: break-word;
+  white-space: pre-wrap;
 `;
 
 const StyledDate = styled.div<{ $isMine: boolean }>`
@@ -72,10 +75,10 @@ const Chat = ({ chat }: { chat: ChatType }) => {
       hour: date.getHours(),
       min: date.getMinutes(),
     });
-  }, []);
+  }, [chat.createdTimeInSec]);
 
   return (
-    <StyledChatContainer $isMine={chat.isMine}>
+    <StyledChatContainer className={`container ${chat.isMine && "isMine"}`}>
       <StyledChat
         className={`chat ${chat.isMine && "isMine"}`}
         $color={color}

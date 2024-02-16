@@ -22,7 +22,7 @@ export async function getChatRooms(p: positionType) {
     return mappedRooms;
   } catch (err) {
     console.log(err);
-    return { rooms: [] };
+    return { rooms: [], err };
   }
 }
 

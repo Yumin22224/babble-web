@@ -4,11 +4,13 @@ import { useEffect, useState } from "react";
 import { ChatRoomType, SampleChatRoomList } from "../../Constants";
 import { ChatRoomMarker } from "./Components/ChatRoomMarker";
 import { getChatRooms } from "../../API/ChatAPI";
+import { useNavigate } from "react-router-dom";
 
 const MainMap = () => {
   const { curLocation, setCurLocation } = useMyLocationContext();
   const { setWatchID } = useMyLocationContext();
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const updateCurrentLocation = () => {
@@ -37,8 +39,13 @@ const MainMap = () => {
     async function fetchChatRooms() {
       try {
         const fetchedChatRooms = await getChatRooms(curLocation);
+        if (fetchedChatRooms.err) {
+          alert("다시 로그인 해주세요.");
+          navigate(`/login`);
+        } else {
           setChatRooms(fetchedChatRooms);
-          console.log('fetching chat rooms success');
+          console.log("fetching chat rooms success");
+        }
       } catch (error) {
         console.error("Fetching chat rooms failed:", error);
       }

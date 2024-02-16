@@ -39,6 +39,12 @@ const StyledChatRoomInfo = styled.div<{ $show: boolean; $expand: boolean }>`
 
   div {
     font-weight: 600;
+    text-shadow:
+      0 0 5px #ffffff,
+      0 0 9px #ffffff,
+      0 0 13px #ffffff,
+      0 0 17px #ffffff,
+      0 0 21px #fff;
   }
   .roomName {
     word-break: break-all;

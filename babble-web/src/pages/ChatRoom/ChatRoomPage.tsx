@@ -1,9 +1,9 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
 import styled from "styled-components";
 //import { SampleChatRoomList } from "../../Constants";
 import { Wrapper } from "../../StyledComponents/Wrapper";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { NewChatRoomContext } from "../../Context/ChatRoomsContext";
 import { useEffect } from "react";
 import {
@@ -18,6 +18,7 @@ import { ColorType, useUserContext } from "../../Context/UserContext";
 import SendIcon from "./Components/SendIcon";
 import { invertColor } from "../../API/GenerateColor";
 import squaredPaper from "../../assets/squaredPaper.jpeg";
+//import { SampleChats } from "../../Constants";
 //import linePaper from "../../assets/linePaper.jpg";
 
 const StyledChatRoomDiv = styled(GlassmorphismDiv)`
@@ -34,6 +35,12 @@ const StyledChatRoomDiv = styled(GlassmorphismDiv)`
   .chatWrapper {
     padding-bottom: 1vh;
   }
+
+  &.expand {
+    position: absolute;
+    transform: translateX(50%);
+  }
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 const StyledChatRoomInfo = styled.div`
@@ -103,13 +110,15 @@ const StyledSendDiv = styled.div<{ $color: ColorType; $invColor: ColorType }>`
   background-color: ${({ $invColor }) =>
     `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
 
-  input {
+  textarea {
+    resize: none;
+
     grid-row: 1/2;
     grid-column: 1/2;
     display: block;
     justify-self: stretch;
     max-width: calc(23.5rem + 5vw);
-    height: calc(3rem + 1vh);
+    height: calc(3.4rem + 1vh);
 
     font-size: 1.3em;
 
@@ -119,9 +128,9 @@ const StyledSendDiv = styled.div<{ $color: ColorType; $invColor: ColorType }>`
     color: ${({ $invColor }) =>
       `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 1)`};
   }
-  input::placeholder {
+  textarea::placeholder {
     font-size: 1.5em;
-    margin-top: 1vw;
+    line-height: 2;
   }
 
   .send {
@@ -131,6 +140,30 @@ const StyledSendDiv = styled.div<{ $color: ColorType; $invColor: ColorType }>`
     margin: 0 calc(0.3rem + 0.25vw) 0 calc(0.3rem + 0.25vw);
     cursor: pointer;
   }
+
+  &.expand {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: calc(4rem + 3vh);
+    left: calc(-40vw - 2rem);
+  }
+  textarea.expand {
+    height: calc(30rem + 5vh);
+    width: calc(25rem + 5vw);
+
+    // 웹킷 기반 브라우저를 위한 스타일
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+
+    // Firefox를 위한 스타일
+    scrollbar-width: none;
+  }
+  send.expand {
+    width: calc(25rem + 5vw);
+  }
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 const ChatRoomPage = () => {
@@ -213,9 +246,33 @@ const ChatRoomPage = () => {
 
   const [chatContent, setChatContent] = useState("");
 
-  const handleChange = (e) => {
-    setChatContent(e.target.value);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const chatRoomDivRef = useRef<HTMLDivElement>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const contents = e.currentTarget.value;
+    //contents = contents.replaceAll("<br>", "\r\n");
+    setChatContent(contents);
+
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const hasScrollbar = textarea.scrollHeight > textarea.clientHeight;
+    setIsExpanded(hasScrollbar);
   };
+
+  //   useEffect(() => {
+  //     const chatRoomDiv = chatRoomDivRef.current;
+  //     const textarea = textareaRef.current;
+  //     if (!chatRoomDiv || !textarea) return;
+
+  //     if (isExpanded) {
+  //       textarea.classList.add("expand");
+  //     } else {
+  //       textarea.classList.remove("expand");
+  //     }
+  //   }, [isExpanded]);
 
   const handleSend = () => {
     if (chatContent.length > 0) {
@@ -228,9 +285,13 @@ const ChatRoomPage = () => {
         chatRoomId
       )
         .then((res) => {
-          getChat({ latestChatId: res.id, location: curLocation }, chatRoomId)
+          console.log(res.id);
+          const date = new Date(res.createdTimeInSec * 1000);
+          console.log(date);
+          getRecentChat(chatRoomId, curLocation.lat, curLocation.lng)
             .then((res) => {
-              setChats(res);
+              setChats(res.chats);
+              setChatterCnt(res.chatterCount);
             })
             .catch((err) => {
               console.log("Fetching chats failed:", err);
@@ -250,7 +311,10 @@ const ChatRoomPage = () => {
   return (
     <>
       <Wrapper>
-        <StyledChatRoomDiv>
+        <StyledChatRoomDiv
+          ref={chatRoomDivRef}
+          className={`chatDiv ${isExpanded && "expand"}`}
+        >
           <StyledChatRoomInfo className="chatRoomInfo">
             <div className="roomName">{curChatRoom.roomName}</div>
             <div className="tag">{curChatRoom.hashTag}</div>
@@ -270,18 +334,23 @@ const ChatRoomPage = () => {
             </StyledChatsDiv>
           </div>
           <StyledSendDiv
-            className="sendContainer"
+            className={`sendContainer ${isExpanded && "expand"}`}
             $color={color}
             $invColor={invColor}
           >
-            <input
+            <textarea
+              rows={3}
+              ref={textareaRef}
               id="sendConent"
-              className="content"
+              className={`container ${isExpanded && "expand"}`}
               placeholder="Send Message"
               onChange={handleChange}
               value={chatContent}
             />
-            <div className="send" onClick={handleSend}>
+            <div
+              className={`send ${isExpanded && "expand"}`}
+              onClick={handleSend}
+            >
               <SendIcon width="30px" height="30px" color={color} />
             </div>
           </StyledSendDiv>

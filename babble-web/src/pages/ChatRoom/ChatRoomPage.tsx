@@ -19,7 +19,7 @@ import SendIcon from "./Components/SendIcon";
 import { invertColor } from "../../API/GenerateColor";
 import squaredPaper from "../../assets/squaredPaper.jpeg";
 import { ChatRoomType } from "../../Constants";
-import { SampleChats } from "../../Constants";
+//import { SampleChats } from "../../Constants";
 //import linePaper from "../../assets/linePaper.jpg";
 
 const StyledChatRoomDiv = styled(GlassmorphismDiv)`

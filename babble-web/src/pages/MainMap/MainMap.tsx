@@ -65,7 +65,7 @@ const MainMap = () => {
           },
           {
             enableHighAccuracy: false,
-            maximumAge: 1000, // 5초 동안 캐시된 위치 정보 사용 허용
+            maximumAge: 5000, // 5초 동안 캐시된 위치 정보 사용 허용
             timeout: 300000, // 위치 정보를 가져오기 위한 최대 대기 시간(밀리초)
           }
         );

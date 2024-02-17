@@ -18,7 +18,8 @@ import { ColorType, useUserContext } from "../../Context/UserContext";
 import SendIcon from "./Components/SendIcon";
 import { invertColor } from "../../API/GenerateColor";
 import squaredPaper from "../../assets/squaredPaper.jpeg";
-//import { SampleChats } from "../../Constants";
+import { ChatRoomType } from "../../Constants";
+import { SampleChats } from "../../Constants";
 //import linePaper from "../../assets/linePaper.jpg";
 
 const StyledChatRoomDiv = styled(GlassmorphismDiv)`
@@ -200,9 +201,16 @@ const ChatRoomPage = () => {
     async function fetchData() {
       try {
         const roomsResponse = await getChatRooms(curLocation);
+        if (roomsResponse.err) {
+          alert("다시 로그인 해주세요.");
+          navigate(`/login`);
+          return;
+        }
         setChatRooms(roomsResponse);
 
-        const foundRoom = roomsResponse.find((room) => room.id === chatRoomId);
+        const foundRoom = roomsResponse.find(
+          (room: ChatRoomType) => room.id === chatRoomId
+        );
         if (foundRoom) {
           setCurChatRoom(foundRoom);
           //console.log(foundRoom);
@@ -219,13 +227,13 @@ const ChatRoomPage = () => {
             curLocation.lat,
             curLocation.lng
           );
-          setChatterCnt(chatsResponse.chatterCount);
+          setChatterCnt(chatsResponse.data.chatterCount);
 
-          setChats(chatsResponse.chats);
+          setChats(chatsResponse.data.chats);
 
-          if (chatsResponse.chats.length > 0) {
+          if (chatsResponse.data.chats.length > 0) {
             const date = new Date(
-              chatsResponse.chats[0].createdTimeInSec * 1000
+              chatsResponse.data.chats[0].createdTimeInSec * 1000
             );
             setLastChatDate({
               year: date.getFullYear(),
@@ -244,6 +252,36 @@ const ChatRoomPage = () => {
   }, [chatRoomId, curLocation, navigate, setChatRooms]);
 
   const [chatContent, setChatContent] = useState("");
+  const [isReply, setIsReply] = useState(false);
+  const [parentId, setParentId] = useState<number | null>(null);
+  const chatRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    // chats 배열이 변경될 때마다 chatRefs 배열의 크기를 조정
+    chatRefs.current = chats.map((_, i) => chatRefs.current[i] || null);
+  }, [chats]);
+
+  const handleReplyClick = (id: number) => {
+    setIsReply(!isReply);
+
+    if (!isReply) {
+      setParentId(id);
+    } else {
+      setParentId(null);
+    }
+  };
+
+  const handleParentClick = (parentId: number) => {
+    const parentElement = chatRefs.current[parentId];
+
+    if (parentElement) {
+      parentElement.scrollIntoView({ behavior: "smooth", block: "center" });
+      parentElement.style.border = "1px solid #000";
+      setTimeout(() => {
+        parentElement.style.border = "";
+      }, 3000);
+    }
+  };
 
   const [isExpanded, setIsExpanded] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -286,6 +324,7 @@ const ChatRoomPage = () => {
           content: chatContent,
           latitude: curLocation.lat,
           longitude: curLocation.lng,
+          parentChatId: parentId,
         },
         chatRoomId
       )
@@ -295,8 +334,8 @@ const ChatRoomPage = () => {
           console.log(date);
           getRecentChat(chatRoomId, curLocation.lat, curLocation.lng)
             .then((res) => {
-              setChats(res.chats);
-              setChatterCnt(res.chatterCount);
+              setChats(res.data.chats);
+              setChatterCnt(res.data.chatterCount);
             })
             .catch((err) => {
               console.log("Fetching chats failed:", err);
@@ -306,6 +345,8 @@ const ChatRoomPage = () => {
           console.log("Sending chat failed:", err);
         });
       setChatContent("");
+      setIsReply(false);
+      setParentId(null);
     } else {
       alert("채팅을 입력해주세요.");
     }
@@ -334,7 +375,15 @@ const ChatRoomPage = () => {
           <div className="chatWrapper">
             <StyledChatsDiv>
               {chats.map((chat, index) => (
-                <Chat chat={chat} key={index} />
+                <Chat
+                  chat={chat}
+                  key={index}
+                  handleReplyClick={handleReplyClick}
+                  isReply={isReply}
+                  parentId={parentId}
+                  ref={(el) => (chatRefs.current[chat.id] = el)}
+                  handleParentClick={handleParentClick}
+                />
               ))}
             </StyledChatsDiv>
           </div>

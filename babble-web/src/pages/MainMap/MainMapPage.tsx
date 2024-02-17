@@ -27,17 +27,17 @@ const StyledMainDiv = styled.div`
   height: 100vh;
 `;
 
-const StyledWrapper = styled.div`
+const StyledWrapper = styled.div<{$show:boolean}>`
   z-index: 300;
   background: rgba(
     0,
     0,
     0,
     0.4
-  ); // 투명한 검정색 배경으로 변경하려면 이 값을 조정하세요.
+  ); 
   width: 100vw;
   height: 100vh;
-  position: fixed; // 전체 화면을 커버하도록 위치 고정
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
@@ -78,8 +78,8 @@ const MainPage = () => {
       <StyledMainDiv>
         <ListBtn handleClick={handleClick} />
         {showList && (
-          <StyledWrapper onClick={closeList}>
-            <ListDiv />
+          <StyledWrapper onClick={closeList} $show={showList}>
+            <ListDiv show={showList} />
           </StyledWrapper>
         )}
         <MainMap />

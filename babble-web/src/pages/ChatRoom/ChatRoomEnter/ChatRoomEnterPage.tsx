@@ -107,7 +107,7 @@ const ChatRoomEnterPage = () => {
   const { curLocation } = useMyLocationContext();
 
   const curChatRoom =
-    chatRoomId !== -100
+    chatRoomId !== 0
       ? chatRooms.find((chatRoom) => chatRoom.id === chatRoomId)
       : { ...roomSpec, memberCount: 0 };
 
@@ -118,7 +118,7 @@ const ChatRoomEnterPage = () => {
   };
 
   const handleEnter = () => {
-    if (chatRoomId !== -100) {
+    if (chatRoomId !== 0) {
       //기존 채팅방, isChatter가 false인 경우
       joinChat(
         {
@@ -164,10 +164,10 @@ const ChatRoomEnterPage = () => {
       <div className="chatRoomInfo">
         <p className="roomName">{curChatRoom!.roomName}</p>
         <div className="hashTag">
-          {chatRoomId !== -100 ? curChatRoom!.hashTag : tag}
+          {chatRoomId !== 0 ? curChatRoom!.hashTag : tag}
         </div>
         <div className="memberCount">
-          {chatRoomId !== -100 && curChatRoom!.memberCount}
+          {chatRoomId !== 0 && curChatRoom!.memberCount}
         </div>
       </div>
       <label htmlFor="nickName">닉네임을 입력해주세요</label>

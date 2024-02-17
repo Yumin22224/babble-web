@@ -16,10 +16,13 @@ const MainMap = () => {
     const updateCurrentLocation = () => {
       if (navigator.geolocation) {
         const wId = navigator.geolocation.watchPosition(
-          (position) => {
+          async (position) => {
+            // 위치 정보가 업데이트될 때마다 실행되는 콜백
             const { latitude, longitude } = position.coords;
             setCurLocation({ lat: latitude, lng: longitude });
             console.log("위치 정보 업데이트 성공:", latitude, longitude);
+
+            await fetchChatRooms();
           },
           (error) => {
             console.error("위치 정보 접근 실패:", error);
@@ -44,7 +47,7 @@ const MainMap = () => {
           navigate(`/login`);
         } else {
           setChatRooms(fetchedChatRooms);
-          console.log("fetching chat rooms success");
+          console.log("fetching chat rooms success", fetchedChatRooms);
         }
       } catch (error) {
         console.error("Fetching chat rooms failed:", error);
@@ -65,6 +68,7 @@ const MainMap = () => {
           width: "100vw",
           height: "100vh",
           position: "absolute",
+          zIndex: "1",
         }}
         level={2}
         draggable={false}

@@ -3,8 +3,9 @@ import { ReactNode, createContext } from "react";
 import { getChatRooms } from "../API/ChatAPI";
 import { useMyLocationContext } from "./MyLocationContext";
 import { ChatRoomType } from "../Constants";
+import { useNavigate } from "react-router-dom";
 
-type RoomSpecType = {
+export type RoomSpecType = {
   hashTag: string;
   latitude: number;
   longitude: number;
@@ -37,21 +38,30 @@ export const NewChatRoomProvider = ({ children }: { children: ReactNode }) => {
 
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
 
-   useEffect(() => {
-     async function fetchChatRooms() {
-       try {
-         const fetchedChatRooms = await getChatRooms(curLocation);
-         setChatRooms(fetchedChatRooms);
-         console.log("fetching chat rooms success");
-       } catch (error) {
-         console.error("Fetching chat rooms failed:", error);
-       }
-     }
-     fetchChatRooms();
-   }, []);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    async function fetchChatRooms() {
+      try {
+        const fetchedChatRooms = await getChatRooms(curLocation);
+        if (fetchedChatRooms.err || fetchedChatRooms === 401) {
+          alert("다시 로그인 해주세요.");
+          navigate(`/login`);
+        } else {
+          setChatRooms(fetchedChatRooms);
+          console.log("fetching chat rooms success");
+        }
+      } catch (error) {
+        console.error("Fetching chat rooms failed:", error);
+      }
+    }
+    fetchChatRooms();
+  }, []);
 
   return (
-    <NewChatRoomContext.Provider value={{ roomSpec, setRoomSpec, tag, setTag, chatRooms, setChatRooms }}>
+    <NewChatRoomContext.Provider
+      value={{ roomSpec, setRoomSpec, tag, setTag, chatRooms, setChatRooms }}
+    >
       {children}
     </NewChatRoomContext.Provider>
   );

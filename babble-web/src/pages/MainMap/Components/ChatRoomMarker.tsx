@@ -60,7 +60,6 @@ const expandToFullScreen = keyframes`
   }
 `;
 
-
 const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
   width: 50px;
   height: 30px;
@@ -107,8 +106,8 @@ const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
 `;
 
 export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
-    const navigate = useNavigate();
-    const { curLocation } = useMyLocationContext();
+  const navigate = useNavigate();
+  const { curLocation } = useMyLocationContext();
   const [isHover, setIsHover] = useState(false);
   const [isExpanding, setIsExpanding] = useState(false);
 
@@ -120,22 +119,27 @@ export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
   const handleClick = () => {
     setIsExpanding(true);
     setTimeout(() => {
-        getRecentChat(chatRoom.id, curLocation.lat, curLocation.lng)
-          .then((res) => {
-              if (res.isChatter) {
-                //기존 채팅방, isChatter가 true인 경우
-                navigate(`/chat/${chatRoom.id}`);
-              } else {
-                //기존 채팅방, isChatter가 false인 경우
-                navigate(`/enter/${chatRoom.id}`);
-              }
-          })
-          .catch((error) => {
-            console.log(
-              "error getting recent chat (getting previous chats)",
-              error
-            );
-          });
+      getRecentChat(chatRoom.id, curLocation.lat, curLocation.lng)
+        .then((res) => {
+          if (res.status !== 401) {
+            if (res.data.isChatter) {
+              //기존 채팅방, isChatter가 true인 경우
+              navigate(`/chat/${chatRoom.id}`);
+            } else {
+              //기존 채팅방, isChatter가 false인 경우
+              navigate(`/enter/${chatRoom.id}`);
+            }
+          } else {
+            alert("다시 로그인 해주세요.");
+            navigate(`/login`);
+          }
+        })
+        .catch((error) => {
+          console.log(
+            "error getting recent chat (getting previous chats)",
+            error
+          );
+        });
     }, 1000);
   };
 

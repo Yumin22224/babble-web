@@ -1,16 +1,15 @@
 :root {
   /*색상 변수*/
   /* Color Theme Swatches in Hex */
-  --1-hex : #0c2ff2;
-  
+  --1-hex: #0c2ff2;
+
   --2-hex: #3552f2;
-  
+
   --3-hex: #576ef2;
-  
-  --4-hex : #c9d3f2;
-  
+
+  --4-hex: #c9d3f2;
+
   --5-hex: #80a6f2;
-  
 
   /* Color Theme Swatches in RGBA */
   .Jet-AI-1-rgba {
@@ -88,6 +87,12 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  width: 0;
 }
 
 h1 {

@@ -2,6 +2,14 @@ import axios from "axios";
 import { baseUrl } from "../Constants";
 import { positionType } from "../Context/MyLocationContext";
 
+type ChatRoomType = {
+  id: number;
+  name: string;
+  latitude: number;
+  longitude: number;
+  hashTag: string;
+};
+
 //현재 위치를 기준으로 채팅방 목록을 조회한다.
 export async function getChatRooms(p: positionType) {
   try {
@@ -12,7 +20,7 @@ export async function getChatRooms(p: positionType) {
       },
     });
     const rooms = res.data.rooms;
-    const mappedRooms = rooms.map((room) => ({
+    const mappedRooms = rooms.map((room: ChatRoomType) => ({
       id: room.id,
       roomName: room.name,
       location: { lat: room.latitude, lng: room.longitude },
@@ -21,6 +29,14 @@ export async function getChatRooms(p: positionType) {
     }));
     return mappedRooms;
   } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      if (err.response.status === 401) {
+        //alert("다시 로그인해주세요.");
+        return err.response.status;
+      } else {
+        alert(err.response.data.message);
+      }
+    }
     console.log(err);
     return { rooms: [], err };
   }
@@ -47,6 +63,9 @@ export async function makeChatRooms(newRoom: NewChatRoomType) {
     });
     return res;
   } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      alert(err.response.data.message);
+    }
     console.log(err);
     return false;
   }
@@ -69,8 +88,11 @@ export async function getRecentChat(
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
       },
     });
-    return res.data;
+    return { data: res.data, status: res.status };
   } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      alert(err.response.data.message);
+    }
     console.log(err);
     return { chats: [], isChatter: false };
   }
@@ -107,6 +129,7 @@ type NewChatType = {
   content: string;
   latitude: number;
   longitude: number;
+  parentChatId: number | null;
 };
 
 //본인이 참여 중인 채팅방에서 채팅을 생성한다.
@@ -120,6 +143,9 @@ export async function sendChat(newChat: NewChatType, roomId: number) {
     });
     return res.data;
   } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      alert(err.response.data.message);
+    }
     console.log(err);
     return false;
   }
@@ -156,6 +182,9 @@ export async function getChat(getChat: GetChatType, roomId: number) {
     });
     return res.data.chats;
   } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      alert(err.response.data.message);
+    }
     console.log("Error getting chats", err);
     return [];
   }
@@ -195,6 +224,10 @@ export async function joinChat(userInfo: UserInfoType, roomId: number) {
     });
     return res.data;
   } catch (err) {
+    if (axios.isAxiosError(err) && err.response) {
+      alert(err.response.data.message);
+    }
+
     console.log("Error joining chat room", err);
     return { id: 0, nickname: "" };
   }

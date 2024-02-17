@@ -74,7 +74,7 @@ const StyledHeader = styled(GlassmorphismDiv)<{ $isChatRoute: boolean }>`
           }
         `
       : css`
-          @media screen and (max-width: 400px) {
+          @media screen and (max-width: 950px) {
             border-radius: 60% / 60%;
             top: 1vh;
             left: 1vw;

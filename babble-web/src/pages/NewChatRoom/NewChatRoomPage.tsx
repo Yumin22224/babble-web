@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Wrapper } from "../../StyledComponents/Wrapper";
 
 const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
-  width: calc(6vw + 24em);
+  width: calc(10vw + 19em);
   height: calc(5vw + 20em);
   border-radius: 30%/40%;
   display: flex;
@@ -38,13 +38,13 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
   label {
     font-size: 1.3em;
     font-weight: 600;
-    margin: 1vw 0;
+    margin-top: 1vw;
   }
   input {
     all: unset;
     color: white;
-    align-self: stretch;
-    height: 5vw;
+    height: calc(3vh + 2rem);
+    width: calc(6vw + 18rem);
     border-radius: 10% / 50%;
     background-color: var(--1-hex);
     margin: 0 4vw;
@@ -60,6 +60,12 @@ const StyledTag = styled.div<{ $selected: boolean }>`
   &.selected {
     color: white;
   }
+`;
+
+const CreateBtn = styled(StyledButton)`
+  font-size: calc(1vw + 0.8em);
+  line-height: calc(2vh + 0.3em);
+  font-weight: 700;
 `;
 
 const tagGuide = [
@@ -130,6 +136,10 @@ const NewChatRoomPage = () => {
   };
 
   const handleCreateClick = () => {
+    if (curLocation.lat === 0 && curLocation.lng === 0) {
+      alert("잠시만 기다려주세요. (위치 정보 갱신중...)");
+      return;
+    }
     const newRoom = {
       hashTag: tagGuide[selectedTag].engTag,
       latitude: curLocation.lat,
@@ -165,9 +175,9 @@ const NewChatRoomPage = () => {
           onChange={handleChange}
           placeholder={tagGuide[selectedTag].example}
         />
-        <StyledButton className="createRoom" onClick={handleCreateClick}>
+        <CreateBtn className="createRoom" onClick={handleCreateClick}>
           생성
-        </StyledButton>
+        </CreateBtn>
       </StyledNewChatRoomDiv>
     </Wrapper>
   );

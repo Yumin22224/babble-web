@@ -1,11 +1,12 @@
 import { Map, MapMarker, CustomOverlayMap, Circle } from "react-kakao-maps-sdk";
 import { useMyLocationContext } from "../../Context/MyLocationContext";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ChatRoomType, SampleChatRoomList } from "../../Constants";
 import { ChatRoomMarker } from "./Components/ChatRoomMarker";
 import { getChatRooms } from "../../API/ChatAPI";
 import { useNavigate } from "react-router-dom";
 import Marker from "../../assets/Marker.png";
+import { NewChatRoomContext } from "../../Context/ChatRoomsContext";
 
 function calculateDistance(
   lat1: number,
@@ -31,9 +32,18 @@ function calculateDistance(
 const MainMap = () => {
   const { curLocation, setCurLocation } = useMyLocationContext();
   const { setWatchID } = useMyLocationContext();
-  const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
-  const [filteredRoomIds, setFilteredRoomIds] = useState<number[]>([]);
+  //const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
+  const context = useContext(NewChatRoomContext);
+  if (!context) {
+    throw new Error(
+      "useContext(NewChatRoomContext) must be inside a Provider with a value"
+    );
+  }
+  const { setChatRooms, chatRooms, filteredRoomIds, setFilteredRoomIds } = context;
+
   const navigate = useNavigate();
+
+
 
   useEffect(() => {
     const updateCurrentLocation = () => {
@@ -55,7 +65,7 @@ const MainMap = () => {
           },
           {
             enableHighAccuracy: false,
-            maximumAge: 5000, // 5초 동안 캐시된 위치 정보 사용 허용
+            maximumAge: 1000, // 5초 동안 캐시된 위치 정보 사용 허용
             timeout: 300000, // 위치 정보를 가져오기 위한 최대 대기 시간(밀리초)
           }
         );
@@ -95,7 +105,7 @@ const MainMap = () => {
 
     updateCurrentLocation();
     //fetchChatRooms();
-  }, [setCurLocation, setWatchID]);
+  }, [setCurLocation, setWatchID, curLocation, navigate, setFilteredRoomIds, setChatRooms]);
 
   //   const handleDragEnd = (event: kakao.maps.Marker) => {
   //     const position = event.getPosition();

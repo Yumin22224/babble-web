@@ -19,6 +19,8 @@ interface NewChatRoomContextType {
   setTag: (arg: string) => void;
   chatRooms: ChatRoomType[];
   setChatRooms: (arg: ChatRoomType[]) => void;
+  filteredRoomIds: number[];
+  setFilteredRoomIds: (arg: number[]) => void;
 }
 
 export const NewChatRoomContext = createContext<
@@ -37,6 +39,7 @@ export const NewChatRoomProvider = ({ children }: { children: ReactNode }) => {
   const { curLocation } = useMyLocationContext();
 
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
+  const [filteredRoomIds, setFilteredRoomIds] = useState<number[]>([]);
 
   const navigate = useNavigate();
 
@@ -60,7 +63,16 @@ export const NewChatRoomProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <NewChatRoomContext.Provider
-      value={{ roomSpec, setRoomSpec, tag, setTag, chatRooms, setChatRooms }}
+      value={{
+        roomSpec,
+        setRoomSpec,
+        tag,
+        setTag,
+        chatRooms,
+        setChatRooms,
+        filteredRoomIds,
+        setFilteredRoomIds,
+      }}
     >
       {children}
     </NewChatRoomContext.Provider>

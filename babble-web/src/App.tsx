@@ -11,32 +11,44 @@ import ChatRoomPage from "./pages/ChatRoom/ChatRoomPage";
 import { UserContextProivder } from "./Context/UserContext";
 import NewChatRoomPage from "./pages/NewChatRoom/NewChatRoomPage";
 import { NewChatRoomProvider } from "./Context/ChatRoomsContext";
+import { createGlobalStyle } from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
+  :root {
+    --gradient-start: #5583EE;
+    --gradient-end: #41D8DD;
+    background: linear-gradient(33deg, var(--gradient-start), var(--gradient-end));
+  }
+`;
 
 function App() {
   return (
-    <UserContextProivder>
-      <MyLocationProvider>
-        <NewChatRoomProvider>
-          <Routes>
-            <Route path="/login" element={<Landing />} />
-            <Route
-              path="/"
-              element={
-                <PrivateRoute>
-                  <Header />
-                </PrivateRoute>
-              }
-            >
-              <Route path="/main" element={<MainPage />} />
+    <>
+      <GlobalStyle/>
+      <UserContextProivder>
+        <MyLocationProvider>
+          <NewChatRoomProvider>
+            <Routes>
+              <Route path="/login" element={<Landing />} />
+              <Route
+                path="/"
+                element={
+                  <PrivateRoute>
+                    <Header />
+                  </PrivateRoute>
+                }
+              >
+                <Route path="/main" element={<MainPage />} />
 
-              <Route path="/enter/:id" element={<ChatRoomEnterPage />} />
-              <Route path="/chat/:id" element={<ChatRoomPage />} />
-              <Route path="/chat/new" element={<NewChatRoomPage />} />
-            </Route>
-          </Routes>
-        </NewChatRoomProvider>
-      </MyLocationProvider>
-    </UserContextProivder>
+                <Route path="/enter/:id" element={<ChatRoomEnterPage />} />
+                <Route path="/chat/:id" element={<ChatRoomPage />} />
+                <Route path="/chat/new" element={<NewChatRoomPage />} />
+              </Route>
+            </Routes>
+          </NewChatRoomProvider>
+        </MyLocationProvider>
+      </UserContextProivder>
+    </>
   );
 }
 

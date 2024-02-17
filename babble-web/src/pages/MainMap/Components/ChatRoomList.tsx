@@ -6,6 +6,19 @@ import { getChatRooms, getRecentChat } from "../../../API/ChatAPI";
 import { useMyLocationContext } from "../../../Context/MyLocationContext";
 import { useEffect, useState } from "react";
 
+const StyledBackGround = styled.div<{ $show: boolean }>`
+  box-sizing: border-box;
+  z-index: 999;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 110%;
+  height: 110%;
+  box-shadow: inset 0px 4px 34px rgba(255, 255, 255, 0.6);
+  filter: blur(40px);
+`;
+
 const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   position: absolute;
   top: 50%;
@@ -18,6 +31,16 @@ const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   overflow-y: auto;
   overscroll-behavior: contain;
   height: calc(20rem + 5vh);
+
+  background: linear-gradient(
+    90deg,
+    rgba(0, 240, 255, 0.3) 2.9%,
+    rgba(255, 0, 229, 0.3) 49.2%,
+    rgba(0, 255, 209, 0.3) 97.48%
+  );
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: -9px -9px 16px rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
 
   //애니메이션이 안먹힌다... visibility로 해야할 것 같다 (미해결)
   ${($show) => $show && `transform : translate(-50%, -50%) scale(1);`}
@@ -57,7 +80,8 @@ export const ListDiv = ({ show }: { show: boolean }) => {
     fetchChatRooms();
   }, []);
   return (
-    <StyledListDiv $show={show}>
+    <StyledListDiv $show={show} className="list shadow-4-inner">
+      <StyledBackGround $show={show} />
       {chatRooms.map((chatRoom) => (
         <Box chatRoom={chatRoom} />
       ))}
@@ -78,7 +102,16 @@ const StyledBox = styled.div`
 
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 10% /20%;
-  background: rgba(255, 255, 255, 0.3);
+  background: radial-gradient(
+    45.31% 48.06% at 50% 48.06%,
+    #f4fffc 0%,
+    #95ffe6 100%
+  );
+  border: 7px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    9px 9px 16px rgba(163, 177, 198, 0.6),
+    -9px -9px 16px rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
 
   .hashTag {
     grid-column: 1/2;

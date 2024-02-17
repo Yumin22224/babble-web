@@ -51,34 +51,80 @@
 
   color-scheme: light dark;
   color: #0c2ff2;
-  background: rgb(201, 211, 242);
-  background: -moz-radial-gradient(
-    circle,
-    rgba(201, 211, 242, 1) 0%,
-    rgba(141, 174, 242, 1) 25%,
-    rgba(87, 110, 242, 1) 70%,
-    rgba(12, 47, 242, 1) 100%
-  );
-  background: -webkit-radial-gradient(
-    circle,
-    rgba(201, 211, 242, 1) 0%,
-    rgba(141, 174, 242, 1) 25%,
-    rgba(87, 110, 242, 1) 70%,
-    rgba(12, 47, 242, 1) 100%
-  );
-  background: radial-gradient(
-    circle,
-    rgba(201, 211, 242, 1) 0%,
-    rgba(141, 174, 242, 1) 25%,
-    rgba(87, 110, 242, 1) 70%,
-    rgba(12, 47, 242, 1) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c9d3f2",endColorstr="#0c2ff2",GradientType=1);
+
+  
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  .shadow-2-drop {
+    box-shadow: 0px 28px 50px rgba(13, 37, 80, 0.16);
+  }
+
+  .shadow-4-inner {
+    box-shadow:
+      inset 0px 26px 48px rgba(255, 255, 255, 0.64),
+      inset 0px -31px 43px rgba(13, 37, 80, 0.16);
+  }
+
+  .combined-shadow-2-4 {
+    box-shadow:
+      0px 28px 50px rgba(13, 37, 80, 0.16),
+      inset 0px 26px 48px rgba(255, 255, 255, 0.64),
+      inset 0px -31px 43px rgba(13, 37, 80, 0.16);
+  }
+
+  .gradient--5 {
+  --gradient-start: #5583EE;
+  --gradient-start-text: '#5583EE';
+  --gradient-end: #41D8DD;
+  --gradient-end-text: '#41D8DD';
+}
+
+  .gradient--7 {
+  --gradient-start: #D279EE;
+  --gradient-start-text: '#D279EE';
+  --gradient-end: #F8C390;
+  --gradient-end-text: '#F8C390';
+}
+
+  .gradient {
+  display: inline-block;
+  height: 250px;
+  width: 80%;
+  background: linear-gradient(33deg, var(--gradient-start), var(--gradient-end));
+  border-radius: 20px;
+  box-shadow: 0 5px 10px #0002;
+}
+
+  .start-color, .end-color {
+  padding: 10px 0 0 10px;
+  &:before {
+    content: '';
+    width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+  &:after {
+    padding: 0 10px;
+    vertical-align: 2px;
+    border-radius: 999px;
+    display: inline-block;
+  }
+}
+
+.end-color {
+  &:before { background-color: var(--gradient-start); }
+  &:after { content: var(--gradient-start-text); }
+}
+
+.start-color {
+  &:before { background-color: var(--gradient-end); }
+  &:after { content: var(--gradient-end-text); }
+}
 }
 
 body {

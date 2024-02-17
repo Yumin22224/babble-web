@@ -95,10 +95,18 @@ const StyledListBtn = styled(GlassmorphismDiv)`
   width: 30px;
   height: 30px;
   padding: 5px;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(1px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 30%;
+
+  background: linear-gradient(
+    90deg,
+    rgba(0, 240, 255, 0.3) 2.9%,
+    rgba(255, 0, 229, 0.3) 49.2%,
+    rgba(0, 255, 209, 0.3) 97.48%
+  );
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  box-shadow: -9px -9px 16px rgba(255, 255, 255, 0.6);
+  border-radius: 30px;
+
+
   background-image: url(https://cdn.icon-icons.com/icons2/2385/PNG/512/list_icon_144238.png);
   background-repeat: no-repeat;
   background-position: center;
@@ -113,8 +121,6 @@ const StyledListBtn = styled(GlassmorphismDiv)`
     top: 9vh;
     left: 80vw;
   }
-
-  
 `;
 
 const ListBtn = ({ handleClick }: { handleClick: () => void }) => {

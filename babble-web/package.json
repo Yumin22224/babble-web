@@ -30,5 +30,5 @@
     "typescript": "^5.2.2",
     "vite": "^5.0.8"
   },
-  "proxy": " https://babble.wafflestudio.com"
+  "proxy": " https://babble.wafflestudio.com/"
 }

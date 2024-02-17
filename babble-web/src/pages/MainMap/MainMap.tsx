@@ -105,7 +105,7 @@ const MainMap = () => {
 
     updateCurrentLocation();
     //fetchChatRooms();
-  }, [setCurLocation, setWatchID, curLocation, navigate, setFilteredRoomIds, setChatRooms]);
+  }, [setCurLocation, setWatchID, navigate, setFilteredRoomIds, setChatRooms]);
 
   //   const handleDragEnd = (event: kakao.maps.Marker) => {
   //     const position = event.getPosition();

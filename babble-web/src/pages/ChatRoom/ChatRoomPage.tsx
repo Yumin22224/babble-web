@@ -37,6 +37,7 @@ const StyledChatRoomDiv = styled(GlassmorphismDiv)`
   color: #040159;
   .chatWrapper {
     padding-bottom: 1vh;
+    min-width: calc(25rem + 5vw);
   }
 
   &.expand {
@@ -64,7 +65,7 @@ const StyledChatRoomInfo = styled.div`
     background-color: var(--4-hex);
     z-index: 100;
     margin-right: -10px;
-    font-weight:600;
+    font-weight: 600;
   }
   .tag {
     background-color: var(--3-hex);

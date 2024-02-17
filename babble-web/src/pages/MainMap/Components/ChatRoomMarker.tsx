@@ -68,37 +68,31 @@ const StyledChatRoomMarker = styled.div<{
   width: 50px;
   height: 30px;
   position: absolute;
-  //transform: translateX(-50%);
 
-  ${($valid) =>
-    $valid
-      ? css`
-          background: rgb(240, 242, 201);
-          background: -moz-linear-gradient(
-            0deg,
-            rgba(240, 242, 201, 1) 0%,
-            rgba(12, 47, 242, 1) 100%
-          );
-          background: -webkit-linear-gradient(
-            0deg,
-            rgba(240, 242, 201, 1) 0%,
-            rgba(12, 47, 242, 1) 100%
-          );
-          background: linear-gradient(
-            0deg,
-            rgba(240, 242, 201, 1) 0%,
-            rgba(12, 47, 242, 1) 100%
-          );
-          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f0f2c9",endColorstr="#0c2ff2",GradientType=1);
-        `
-      : css`
-          background: rgb(2, 0, 36);
-          background: linear-gradient(
-            0deg,
-            rgba(2, 0, 36, 0.5494791666666667) 0%,
-            rgba(0, 212, 255, 0.4150253851540616) 100%
-          );
-        `}
+  background-color: #FBAB7E;
+background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+
+
+  &.valid {
+    background: rgb(240, 242, 201);
+    background: -moz-linear-gradient(
+      0deg,
+      rgba(240, 242, 201, 1) 0%,
+      rgba(12, 47, 242, 1) 100%
+    );
+    background: -webkit-linear-gradient(
+      0deg,
+      rgba(240, 242, 201, 1) 0%,
+      rgba(12, 47, 242, 1) 100%
+    );
+    background: linear-gradient(
+      0deg,
+      rgba(240, 242, 201, 1) 0%,
+      rgba(12, 47, 242, 1) 100%
+    );
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f0f2c9",endColorstr="#0c2ff2",GradientType=1);
+  }
+  );
 
   border-radius: 60% 60% 18% 18% / 100% 100% 25% 25%;
   position: relative;
@@ -179,7 +173,7 @@ export const ChatRoomMarker = ({
       $show={isHover}
     >
       <StyledChatRoomMarker
-        className="chatRoomMarker"
+        className={`chatRoomMarker ${isValid && `valid`}`}
         $show={isHover}
         $expand={isExpanding}
         $valid={isValid}

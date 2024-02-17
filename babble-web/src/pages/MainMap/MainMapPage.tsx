@@ -71,7 +71,7 @@ const MainPage = () => {
   return (
     <StyledMainContainer>
       <StyledMainDiv>
-        <ListBtn handleClick={handleClick} />
+        <ListBtn handleClick={handleClick} show={showList} />
         {showList && (
           <StyledWrapper onClick={closeList} $show={showList}>
             <ListDiv show={showList} />
@@ -86,7 +86,7 @@ const MainPage = () => {
 
 export default MainPage;
 
-const StyledListBtn = styled(GlassmorphismDiv)`
+const StyledListBtn = styled(GlassmorphismDiv)<{ $show: boolean }>`
   z-index: 400;
   position: absolute;
   top: 50%;
@@ -102,20 +102,22 @@ const StyledListBtn = styled(GlassmorphismDiv)`
     rgba(255, 0, 229, 0.3) 49.2%,
     rgba(0, 255, 209, 0.3) 97.48%
   );
-  border: 4px solid rgba(255, 255, 255, 0.3);
+  border: 4px solid rgba(0, 25, 255, 0.3);
   box-shadow: -9px -9px 16px rgba(255, 255, 255, 0.6);
   border-radius: 30px;
-
 
   background-image: url(https://cdn.icon-icons.com/icons2/2385/PNG/512/list_icon_144238.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 25px;
+  filter: drop-shadow(9px 9px 16px rgba(163, 177, 198, 0.6)) blur(0.5px);
 
   cursor: pointer;
   &:hover {
     background-color: rgba(255, 255, 255, 1);
   }
+
+  ${($show) => $show && `background-color: rgba(255, 255, 255, 1);`}
 
   @media screen and (max-width: 450px) {
     top: 9vh;
@@ -123,7 +125,12 @@ const StyledListBtn = styled(GlassmorphismDiv)`
   }
 `;
 
-const ListBtn = ({ handleClick }: { handleClick: () => void }) => {
-  return <StyledListBtn onClick={handleClick} />;
+const ListBtn = ({
+  handleClick,
+  show,
+}: {
+  handleClick: () => void;
+  show: boolean;
+}) => {
+  return <StyledListBtn onClick={handleClick} $show={show} />;
 };
-

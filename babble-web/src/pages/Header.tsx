@@ -1,8 +1,11 @@
 //화면 상단 로고, 날짜, 시간
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
 import { GlassmorphismDiv } from "../StyledComponents/GmDiv.tsx";
+import { getChatRooms } from "../API/ChatAPI.tsx";
+import { NewChatRoomContext } from "../Context/ChatRoomsContext.tsx";
+import { useMyLocationContext } from "../Context/MyLocationContext.tsx";
 
 const StyledHeader = styled(GlassmorphismDiv)<{ $isChatRoute: boolean }>`
   position: fixed;
@@ -118,10 +121,40 @@ const Header = () => {
     return `${h}H ${m}M ${s}S`;
   };
 
+  const context = useContext(NewChatRoomContext);
+  if (!context) {
+    throw new Error(
+      "useContext(NewChatRoomContext) must be inside a Provider with a value"
+    );
+  }
+  const { setChatRooms, chatRooms } = context;
+  const { curLocation } = useMyLocationContext();
+
+  const handleMainClick = () => {
+    navigate(`/main`);
+
+    async function fetchChatRooms() {
+      try {
+        const fetchedChatRooms = await getChatRooms(curLocation);
+        if (fetchedChatRooms.err || fetchedChatRooms === 401) {
+          alert("다시 로그인 해주세요.");
+          navigate(`/login`);
+        } else {
+          setChatRooms(fetchedChatRooms);
+          console.log("fetching chat rooms success");
+          console.log(fetchedChatRooms);
+          console.log(chatRooms);
+        }
+      } catch (error) {
+        console.error("Fetching chat rooms failed:", error);
+      }
+    }
+    fetchChatRooms();
+  };
   return (
     <>
       <StyledHeader $isChatRoute={isChatRoute}>
-        <h1 onClick={() => navigate(`/main`)}>babble</h1>
+        <h1 onClick={handleMainClick}>babble</h1>
         <div>
           <p>{formatDate(currentTime)}</p>
           <p>{formatTime(currentTime)}</p>

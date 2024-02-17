@@ -1,13 +1,23 @@
 import styled, { css, keyframes } from "styled-components";
 import { ChatRoomType } from "../../../Constants";
 
-const hologramBeam = keyframes`
+//EAE5C9
+//6CC6CB
+
+//014871
+//D7EDE2
+
+const expandCircle = keyframes`
   0% {
-    clip-path: polygon(25% 100%, 75% 100%, 65% 100%, 35% 100%);
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(0.5);
     opacity: 0.5;
   }
   100% {
-    clip-path: polygon(0 0, 100% 0, 65% 100%, 35% 100%);
+    transform: scale(1);
     opacity: 1;
   }
 `;
@@ -23,45 +33,60 @@ const StyledChatRoomInfo = styled.div<{
 
   position: absolute;
   bottom: 50px;
-  width: 120px;
+  width: 150px;
   height: 150px;
   background-color: transparent;
-  color: rgba(12, 46, 242, 1);
+
   overflow: hidden;
 
-  &::after {
+  color: #9fa5d5;
+
+  &::before {
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    ${($valid) =>
-      $valid
-        ? css`
-            background: linear-gradient(
-              to top,
-              rgba(12, 46, 242, 0.5),
-              transparent
-            );
-          `
-        : css`
-            background: linear-gradient(
-              to top,
-              rgba(2, 0, 36, 0.5494791666666667) 0%,
-              rgba(0, 212, 255, 0.4150253851540616) 100%
-            );
-          `}
-    clip-path: polygon(0 0, 100% 0, 75% 100%, 25% 100%);
-    animation: ${hologramBeam} 1s forwards;
+    border-radius: 50%; /* 원 모양을 만듭니다. */
+    animation: ${expandCircle} 1s forwards;
+    background-color: #85ffbd;
+    background-image: linear-gradient(
+      45deg,
+      #85ffbd 0%,
+      #fffb7d 50%,
+      #ffffff 100%
+    );
+    filter: opacity(0.5);
+  }
+
+  &.valid {
+    color: var(--1-hex);
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+
+      background: linear-gradient(to top, rgba(12, 46, 242, 0.5), transparent);
+      border-radius: 50%; /* 원 모양을 만듭니다. */
+      animation: ${expandCircle} 1s forwards;
+    }
   }
 
   div {
     font-weight: 600;
     text-shadow:
       0 0 5px #ffffff,
+      0 0 6px #ffffff,
+      0 0 7px #ffffff,
+      0 0 8px #ffffff,
       0 0 9px #ffffff,
+      0 0 11px #ffffff,
       0 0 13px #ffffff,
+      0 0 15px #ffffff,
       0 0 17px #ffffff,
       0 0 21px #fff;
   }
@@ -69,8 +94,18 @@ const StyledChatRoomInfo = styled.div<{
     word-break: break-all;
     white-space: pre-wrap;
   }
+`;
 
-  ${$valid => !$valid && `color: white;`}
+const StyledTag = styled.div`
+  mix-blend-mode: hard-light;
+  border-radius: 40%;
+  z-index: 500;
+`;
+
+const StyledName = styled.div`
+  mix-blend-mode: hard-light;
+  border-radius: 40%;
+  z-index: 500;
 `;
 
 const ChatRoomInfo = ({
@@ -89,10 +124,14 @@ const ChatRoomInfo = ({
       $show={isHover}
       $expand={expand}
       $valid={valid}
-      className="chatRoomInfo"
+      className={`chatRoomInfo ${valid && `valid`}`}
     >
-      <div className="hashTag">{chatRoom.hashTag}</div>
-      <div className="roomName">{chatRoom.roomName}</div>
+      <StyledTag className={`hashTag ${valid && `valid`}`}>
+        {chatRoom.hashTag}
+      </StyledTag>
+      <StyledName className={`roomName ${valid && `valid`}`}>
+        {chatRoom.roomName}
+      </StyledName>
     </StyledChatRoomInfo>
   );
 };

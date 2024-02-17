@@ -32,14 +32,13 @@ const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   overscroll-behavior: contain;
   height: calc(20rem + 5vh);
 
-  background: linear-gradient(
-    90deg,
-    rgba(0, 240, 255, 0.3) 2.9%,
-    rgba(255, 0, 229, 0.3) 49.2%,
-    rgba(0, 255, 209, 0.3) 97.48%
-  );
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  box-shadow: -9px -9px 16px rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 10% /20%;
+  
+  border: 7px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    9px 9px 16px rgba(163, 177, 198, 0.6),
+    -9px -9px 16px rgba(255, 255, 255, 0.6);
   border-radius: 30px;
 
   //애니메이션이 안먹힌다... visibility로 해야할 것 같다 (미해결)
@@ -80,7 +79,7 @@ export const ListDiv = ({ show }: { show: boolean }) => {
     fetchChatRooms();
   }, []);
   return (
-    <StyledListDiv $show={show} className="list shadow-4-inner">
+    <StyledListDiv $show={show} className="list shadow-2-drop">
       <StyledBackGround $show={show} />
       {chatRooms.map((chatRoom) => (
         <Box chatRoom={chatRoom} />
@@ -89,7 +88,7 @@ export const ListDiv = ({ show }: { show: boolean }) => {
   );
 };
 
-const StyledBox = styled.div`
+const StyledBox = styled(GlassmorphismDiv)`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 2fr;
@@ -100,18 +99,8 @@ const StyledBox = styled.div`
   margin: 1vw;
   padding: 1vw;
 
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 10% /20%;
-  background: radial-gradient(
-    45.31% 48.06% at 50% 48.06%,
-    #f4fffc 0%,
-    #95ffe6 100%
-  );
-  border: 7px solid rgba(255, 255, 255, 0.3);
-  box-shadow:
-    9px 9px 16px rgba(163, 177, 198, 0.6),
-    -9px -9px 16px rgba(255, 255, 255, 0.6);
-  border-radius: 30px;
+  border-radius:15%/30%;
+  
 
   .hashTag {
     grid-column: 1/2;

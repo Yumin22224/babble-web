@@ -23,6 +23,8 @@ import { SampleChats } from "../../Constants";
 //import linePaper from "../../assets/linePaper.jpg";
 
 const StyledChatRoomDiv = styled(GlassmorphismDiv)`
+  mix-blend-mode: difference;
+
   display: grid;
   border-radius: 0;
   border: none;

@@ -46,11 +46,19 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
     height: calc(3vh + 2rem);
     width: calc(6vw + 18rem);
     border-radius: 10% / 50%;
-    background-color: var(--1-hex);
+    --gradient-start: #5583ee;
+    --gradient-end: #41d8dd;
+    background: linear-gradient(
+      33deg,
+      var(--gradient-start),
+      var(--gradient-end)
+    );
+
     margin: 0 4vw;
   }
   input::placeholder {
-    color: var(--5-hex);
+    mix-blend-mode: difference;
+    opacity:0.7;
   }
 `;
 
@@ -170,6 +178,7 @@ const NewChatRoomPage = () => {
         </div>
         <label htmlFor="roomTitle">{tagGuide[selectedTag].guide}</label>
         <input
+          
           type="text"
           id="roomTitle"
           onChange={handleChange}

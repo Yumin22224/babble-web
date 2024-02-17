@@ -15,7 +15,7 @@ import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   :root {
-    --gradient-start: #5583EE;
+   --gradient-start: #5583EE;
     --gradient-end: #41D8DD;
     background: linear-gradient(33deg, var(--gradient-start), var(--gradient-end));
   }
@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`
 function App() {
   return (
     <>
-      <GlobalStyle/>
+      <GlobalStyle />
       <UserContextProivder>
         <MyLocationProvider>
           <NewChatRoomProvider>
@@ -38,7 +38,7 @@ function App() {
                   </PrivateRoute>
                 }
               >
-                <Route path="/main" element={<MainPage />} />
+                <Route path="/main" element={<MainPage />} key={Date.now()} />
 
                 <Route path="/enter/:id" element={<ChatRoomEnterPage />} />
                 <Route path="/chat/:id" element={<ChatRoomPage />} />

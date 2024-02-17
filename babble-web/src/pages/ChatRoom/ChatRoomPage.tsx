@@ -64,17 +64,20 @@ const StyledChatRoomInfo = styled.div`
     background-color: var(--4-hex);
     z-index: 100;
     margin-right: -10px;
+    font-weight:600;
   }
   .tag {
     background-color: var(--3-hex);
     z-index: 50;
     min-width: calc(3rem + 1vw);
     margin-right: -10px;
+    color: white;
   }
   .memberCount {
     background-color: var(--5-hex);
     z-index: 10;
     min-width: calc(2rem + 1vw);
+    color: white;
   }
   //height: 5vh;
 `;

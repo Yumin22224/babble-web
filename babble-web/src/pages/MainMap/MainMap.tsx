@@ -5,6 +5,7 @@ import { ChatRoomType, SampleChatRoomList } from "../../Constants";
 import { ChatRoomMarker } from "./Components/ChatRoomMarker";
 import { getChatRooms } from "../../API/ChatAPI";
 import { useNavigate } from "react-router-dom";
+import Marker from "../../assets/Marker.png"
 
 const MainMap = () => {
   const { curLocation, setCurLocation } = useMyLocationContext();
@@ -90,20 +91,30 @@ const MainMap = () => {
             <ChatRoomMarker chatRoom={chatRoom} />
           </CustomOverlayMap>
         ))}
-        <MapMarker position={curLocation} draggable={false} zIndex={4} />{" "}
+        <MapMarker
+          position={curLocation}
+          draggable={false}
+          zIndex={4}
+          image={{
+            src: `${Marker}`,
+            size: {
+              width: 30,
+              height: 40,
+            },
+          }}
+        />
         <Circle
           center={{
             lat: curLocation.lat,
             lng: curLocation.lng,
           }}
-          radius={50}
+          radius={70}
           strokeWeight={3}
           strokeColor={"#75B8FA"}
-          strokeOpacity={0.5} 
+          strokeOpacity={0.5}
           fillColor={"#CFE7FF"}
-          fillOpacity={0.3} 
+          fillOpacity={0.3}
         />
-        
       </Map>
     </>
   );

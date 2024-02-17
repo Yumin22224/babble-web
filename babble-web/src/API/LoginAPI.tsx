@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from "axios";
 import { baseUrl } from "../Constants";
 
@@ -12,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 const SocialKakao = () => {
   const navigate = useNavigate();
   const Javascript_api_key = "3d9458a60e9e270c3821f682d91f43c0"; //환경변수로 했더니 브라우저에서 읽지 못하는 에러 (미해결)
-  const kakaoOnSuccess = async (data) => {
+  const kakaoOnSuccess = async (data: { response: { access_token: any; }; }) => {
     const idToken = data.response.access_token;
     //console.log(`idToken from kakao: ${idToken}`);
     kakaoLogin(idToken)
@@ -26,7 +27,7 @@ const SocialKakao = () => {
         navigate("/main"); //일단 메인으로 이동
       });
   };
-  const kakaoOnFailure = (error) => {
+  const kakaoOnFailure = (error: any) => {
     console.log(error);
     alert(`로그인을 다시 시도해주세요.`);
     navigate(`/login`);

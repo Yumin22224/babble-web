@@ -33,7 +33,7 @@ const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   scrollbar-width: none;
 `;
 
-export const ListDiv = (show: boolean) => {
+export const ListDiv = ({show}:{show: boolean}) => {
   const { curLocation } = useMyLocationContext();
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
   const navigate = useNavigate();

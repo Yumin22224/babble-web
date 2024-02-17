@@ -1,4 +1,4 @@
-import { Map, MapMarker, CustomOverlayMap } from "react-kakao-maps-sdk";
+import { Map, MapMarker, CustomOverlayMap, Circle } from "react-kakao-maps-sdk";
 import { useMyLocationContext } from "../../Context/MyLocationContext";
 import { useEffect, useState } from "react";
 import { ChatRoomType, SampleChatRoomList } from "../../Constants";
@@ -12,6 +12,7 @@ const MainMap = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
   const navigate = useNavigate();
 
+    
   useEffect(() => {
     const updateCurrentLocation = () => {
       if (navigator.geolocation) {
@@ -58,11 +59,11 @@ const MainMap = () => {
     fetchChatRooms();
   }, [setCurLocation, setWatchID]);
 
-  const handleDragEnd = (event: kakao.maps.Marker) => {
-    const position = event.getPosition();
-    setCurLocation({ lat: position.getLat(), lng: position.getLng() });
-    console.log(`New Position: ${position}`);
-  };
+  //   const handleDragEnd = (event: kakao.maps.Marker) => {
+  //     const position = event.getPosition();
+  //     setCurLocation({ lat: position.getLat(), lng: position.getLng() });
+  //     console.log(`New Position: ${position}`);
+  //   };
 
   return (
     <>
@@ -89,15 +90,20 @@ const MainMap = () => {
             <ChatRoomMarker chatRoom={chatRoom} />
           </CustomOverlayMap>
         ))}
-        <MapMarker
-          position={curLocation}
-          draggable={true}
-          zIndex={4}
-          onDragEnd={handleDragEnd}
+        <MapMarker position={curLocation} draggable={false} zIndex={4} />{" "}
+        <Circle
+          center={{
+            lat: curLocation.lat,
+            lng: curLocation.lng,
+          }}
+          radius={50}
+          strokeWeight={3}
+          strokeColor={"#75B8FA"}
+          strokeOpacity={0.5} 
+          fillColor={"#CFE7FF"}
+          fillOpacity={0.3} 
         />
-        <CustomOverlayMap
-          position={{ lat: curLocation.lat, lng: curLocation.lng + 0.0025 }}
-        ></CustomOverlayMap>
+        
       </Map>
     </>
   );

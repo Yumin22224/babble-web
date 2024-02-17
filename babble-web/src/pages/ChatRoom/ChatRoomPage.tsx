@@ -198,6 +198,7 @@ const ChatRoomPage = () => {
   });
 
   useEffect(() => {
+    //getChatRooms 말고 그냥 getRecentChat으로 수정해도 ㄱㅊ (미해결)
     async function fetchData() {
       try {
         const roomsResponse = await getChatRooms(curLocation);

@@ -46,6 +46,7 @@ export const SampleChats: ChatType[] = [
       "hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah hi my name is yeah",
     isMine: false,
     createdTimeInSec: 1707914950,
+    parent: null,
   },
   {
     id: 2,
@@ -54,6 +55,7 @@ export const SampleChats: ChatType[] = [
     content: "hi my name is nooo",
     isMine: true,
     createdTimeInSec: 1707914950,
+    parent: null,
   },
   {
     id: 1,
@@ -62,5 +64,6 @@ export const SampleChats: ChatType[] = [
     content: "hi my name is yeah",
     isMine: false,
     createdTimeInSec: 1707913942,
+    parent: null,
   },
 ];

@@ -1,7 +1,7 @@
 import { positionType } from "./Context/MyLocationContext";
 import { ChatType } from "./pages/ChatRoom/Components/Chat";
 
-export const baseUrl = "http://localhost:8080";
+export const baseUrl = " https://babble.wafflestudio.com";
 
 export const clientUrl = "http://localhost:5173";
 

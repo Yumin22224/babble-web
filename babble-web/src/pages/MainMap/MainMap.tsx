@@ -58,6 +58,12 @@ const MainMap = () => {
     fetchChatRooms();
   }, [setCurLocation, setWatchID]);
 
+  const handleDragEnd = (event: kakao.maps.Marker) => {
+    const position = event.getPosition();
+    setCurLocation({ lat: position.getLat(), lng: position.getLng() });
+    console.log(`New Position: ${position}`);
+  };
+
   return (
     <>
       <Map
@@ -74,7 +80,6 @@ const MainMap = () => {
         draggable={false}
         zoomable={false}
       >
-        <MapMarker position={curLocation} />
         {chatRooms.map((chatRoom) => (
           <CustomOverlayMap
             key={chatRoom.id}
@@ -84,6 +89,12 @@ const MainMap = () => {
             <ChatRoomMarker chatRoom={chatRoom} />
           </CustomOverlayMap>
         ))}
+        <MapMarker
+          position={curLocation}
+          draggable={true}
+          zIndex={4}
+          onDragEnd={handleDragEnd}
+        />
         <CustomOverlayMap
           position={{ lat: curLocation.lat, lng: curLocation.lng + 0.0025 }}
         ></CustomOverlayMap>

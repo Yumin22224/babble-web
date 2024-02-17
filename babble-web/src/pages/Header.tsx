@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled, { css } from "styled-components";
-import { GlassmorphismDiv } from "../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../StyledComponents/GmDiv.tsx";
 
 const StyledHeader = styled(GlassmorphismDiv)<{ $isChatRoute: boolean }>`
   position: fixed;

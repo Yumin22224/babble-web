@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GlassmorphismDiv } from "../../../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../../../StyledComponents/GmDiv.tsx";
 import { ChatRoomType, SampleChatRoomList } from "../../../Constants";
 import { useNavigate } from "react-router-dom";
 import { getChatRooms, getRecentChat } from "../../../API/ChatAPI";
@@ -33,7 +33,7 @@ const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   scrollbar-width: none;
 `;
 
-export const ListDiv = ({show}:{show: boolean}) => {
+export const ListDiv = ({ show }: { show: boolean }) => {
   const { curLocation } = useMyLocationContext();
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
   const navigate = useNavigate();

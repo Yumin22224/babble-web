@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../../StyledComponents/GmDiv.tsx";
 import { useEffect, useState } from "react";
 import SocialKakao from "../../API/LoginAPI";
 

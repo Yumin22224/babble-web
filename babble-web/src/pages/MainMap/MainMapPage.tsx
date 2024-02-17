@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../../StyledComponents/GmDiv.tsx";
 import MainMap from "./MainMap";
 import { ListDiv } from "./Components/ChatRoomList";
 import { useEffect, useState } from "react";
@@ -27,14 +27,9 @@ const StyledMainDiv = styled.div`
   height: 100vh;
 `;
 
-const StyledWrapper = styled.div<{$show:boolean}>`
+const StyledWrapper = styled.div<{ $show: boolean }>`
   z-index: 300;
-  background: rgba(
-    0,
-    0,
-    0,
-    0.4
-  ); 
+  background: rgba(0, 0, 0, 0.4);
   width: 100vw;
   height: 100vh;
   position: fixed;

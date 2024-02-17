@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../../StyledComponents/GmDiv.tsx";
 import { useState } from "react";
 import { StyledButton } from "../../StyledComponents/Button";
 import { useMyLocationContext } from "../../Context/MyLocationContext";

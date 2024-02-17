@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { GlassmorphismDiv } from "../../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../../StyledComponents/GmDiv.tsx";
 import styled from "styled-components";
 //import { SampleChatRoomList } from "../../Constants";
 import { Wrapper } from "../../StyledComponents/Wrapper";

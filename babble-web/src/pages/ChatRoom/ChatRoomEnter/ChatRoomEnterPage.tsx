@@ -1,5 +1,5 @@
 import styled, { keyframes } from "styled-components";
-import { GlassmorphismDiv } from "../../../StyledComponents/GmDiv";
+import { GlassmorphismDiv } from "../../../StyledComponents/GmDiv.tsx";
 import { useNavigate, useParams } from "react-router-dom";
 //import { SampleChatRoomList } from "../../../Constants";
 import { ColorType, useUserContext } from "../../../Context/UserContext";

@@ -5,15 +5,36 @@ import { ChatRoomType, SampleChatRoomList } from "../../Constants";
 import { ChatRoomMarker } from "./Components/ChatRoomMarker";
 import { getChatRooms } from "../../API/ChatAPI";
 import { useNavigate } from "react-router-dom";
-import Marker from "../../assets/Marker.png"
+import Marker from "../../assets/Marker.png";
+
+function calculateDistance(
+  lat1: number,
+  lon1: number,
+  lat2: number,
+  lon2: number
+) {
+  const R = 6371e3; // 지구의 반지름, 미터 단위
+  const φ1 = (lat1 * Math.PI) / 180; // φ, λ는 라디안 단위
+  const φ2 = (lat2 * Math.PI) / 180;
+  const Δφ = Math.abs(((lat2 - lat1) * Math.PI) / 180);
+  const Δλ = Math.abs(((lon2 - lon1) * Math.PI) / 180);
+
+  const a =
+    Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+    Math.cos(φ1) * Math.cos(φ2) * Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  const distance = R * c; // 최종 거리, 미터 단위
+  return distance;
+}
 
 const MainMap = () => {
   const { curLocation, setCurLocation } = useMyLocationContext();
   const { setWatchID } = useMyLocationContext();
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
+  const [filteredRoomIds, setFilteredRoomIds] = useState<number[]>([]);
   const navigate = useNavigate();
 
-    
   useEffect(() => {
     const updateCurrentLocation = () => {
       if (navigator.geolocation) {
@@ -24,7 +45,7 @@ const MainMap = () => {
             setCurLocation({ lat: latitude, lng: longitude });
             console.log("위치 정보 업데이트 성공:", latitude, longitude);
 
-            await fetchChatRooms();
+            await fetchChatRooms({ lat: latitude, lng: longitude });
           },
           (error) => {
             console.error("위치 정보 접근 실패:", error);
@@ -41,15 +62,28 @@ const MainMap = () => {
       }
     };
 
-    async function fetchChatRooms() {
+    async function fetchChatRooms({ lat, lng }: { lat: number; lng: number }) {
       try {
         const fetchedChatRooms = await getChatRooms(curLocation);
         if (fetchedChatRooms.err) {
           alert("다시 로그인 해주세요.");
           navigate(`/login`);
         } else {
+          const filteredChatRooms = fetchedChatRooms
+            .filter(
+              (chatRoom: ChatRoomType) =>
+                calculateDistance(
+                  lat,
+                  lng,
+                  chatRoom.location.lat,
+                  chatRoom.location.lng
+                ) <= 70
+            )
+            .map((chatRoom: ChatRoomType) => chatRoom.id);
+          setFilteredRoomIds(filteredChatRooms);
           setChatRooms(fetchedChatRooms);
-          console.log("fetching chat rooms success", fetchedChatRooms);
+          console.log(curLocation);
+          console.log("fetching chat rooms success", filteredChatRooms);
         }
       } catch (error) {
         console.error("Fetching chat rooms failed:", error);
@@ -57,7 +91,7 @@ const MainMap = () => {
     }
 
     updateCurrentLocation();
-    fetchChatRooms();
+    //fetchChatRooms();
   }, [setCurLocation, setWatchID]);
 
   //   const handleDragEnd = (event: kakao.maps.Marker) => {
@@ -88,7 +122,10 @@ const MainMap = () => {
             position={chatRoom.location}
             yAnchor={0.7}
           >
-            <ChatRoomMarker chatRoom={chatRoom} />
+            <ChatRoomMarker
+              chatRoom={chatRoom}
+              isValid={filteredRoomIds.includes(chatRoom.id)}
+            />
           </CustomOverlayMap>
         ))}
         <MapMarker
@@ -114,6 +151,7 @@ const MainMap = () => {
           strokeOpacity={0.5}
           fillColor={"#CFE7FF"}
           fillOpacity={0.3}
+          zIndex={1}
         />
       </Map>
     </>

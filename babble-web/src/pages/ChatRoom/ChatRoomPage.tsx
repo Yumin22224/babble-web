@@ -300,7 +300,7 @@ const ChatRoomPage = () => {
       const hasScrollbar = textarea.scrollHeight > textarea.clientHeight;
       setIsExpanded(hasScrollbar);
     } else {
-      if (contents.length < 120) {
+      if (contents.length < 70) {
         setIsExpanded(false);
       }
     }
@@ -341,6 +341,7 @@ const ChatRoomPage = () => {
             .catch((err) => {
               console.log("Fetching chats failed:", err);
             });
+          setIsExpanded(false);
         })
         .catch((err) => {
           console.log("Sending chat failed:", err);

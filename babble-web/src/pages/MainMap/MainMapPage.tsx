@@ -97,18 +97,16 @@ const StyledListBtn = styled(GlassmorphismDiv)`
   padding: 5px;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(1px);
-  border: 2px solid rgba(53, 81, 242, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 30%;
   background-image: url(https://cdn.icon-icons.com/icons2/2385/PNG/512/list_icon_144238.png);
   background-repeat: no-repeat;
   background-position: center;
   background-size: 25px;
-  backdrop-filter: invert(15%) sepia(93%) saturate(6130%) hue-rotate(236deg)
-    brightness(94%) contrast(103%);
 
   cursor: pointer;
   &:hover {
-    background-color: rgba(53, 81, 242, 0.5);
+    background-color: rgba(255, 255, 255, 1);
   }
 
   @media screen and (max-width: 450px) {
@@ -123,72 +121,3 @@ const ListBtn = ({ handleClick }: { handleClick: () => void }) => {
   return <StyledListBtn onClick={handleClick} />;
 };
 
-
-
-// /* CSS */
-// .button-86 {
-//   all: unset;
-//   width: 100px;
-//   height: 30px;
-//   font-size: 16px;
-//   background: transparent;
-//   border: none;
-//   position: relative;
-//   color: #f0f0f0;
-//   cursor: pointer;
-//   z-index: 1;
-//   padding: 10px 20px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   white-space: nowrap;
-//   user-select: none;
-//   -webkit-user-select: none;
-//   touch-action: manipulation;
-// }
-
-// .button-86::after,
-// .button-86::before {
-//   content: '';
-//   position: absolute;
-//   bottom: 0;
-//   right: 0;
-//   z-index: -99999;
-//   transition: all .4s;
-// }
-
-// .button-86::before {
-//   transform: translate(0%, 0%);
-//   width: 100%;
-//   height: 100%;
-//   background: #28282d;
-//   border-radius: 10px;
-// }
-
-// .button-86::after {
-//   transform: translate(10px, 10px);
-//   width: 35px;
-//   height: 35px;
-//   background: #ffffff15;
-//   backdrop-filter: blur(5px);
-//   -webkit-backdrop-filter: blur(5px);
-//   border-radius: 50px;
-// }
-
-// .button-86:hover::before {
-//   transform: translate(5%, 20%);
-//   width: 110%;
-//   height: 110%;
-// }
-
-// .button-86:hover::after {
-//   border-radius: 10px;
-//   transform: translate(0, 0);
-//   width: 100%;
-//   height: 100%;
-// }
-
-// .button-86:active::after {
-//   transition: 0s;
-//   transform: translate(0, 5%);
-// }

@@ -60,29 +60,45 @@ const expandToFullScreen = keyframes`
   }
 `;
 
-const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
+const StyledChatRoomMarker = styled.div<{
+  $show: boolean;
+  $expand: boolean;
+  $valid: boolean;
+}>`
   width: 50px;
   height: 30px;
   position: absolute;
   //transform: translateX(-50%);
 
-  background: rgb(240, 242, 201);
-  background: -moz-linear-gradient(
-    0deg,
-    rgba(240, 242, 201, 1) 0%,
-    rgba(12, 47, 242, 1) 100%
-  );
-  background: -webkit-linear-gradient(
-    0deg,
-    rgba(240, 242, 201, 1) 0%,
-    rgba(12, 47, 242, 1) 100%
-  );
-  background: linear-gradient(
-    0deg,
-    rgba(240, 242, 201, 1) 0%,
-    rgba(12, 47, 242, 1) 100%
-  );
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f0f2c9",endColorstr="#0c2ff2",GradientType=1);
+  ${($valid) =>
+    $valid
+      ? css`
+          background: rgb(240, 242, 201);
+          background: -moz-linear-gradient(
+            0deg,
+            rgba(240, 242, 201, 1) 0%,
+            rgba(12, 47, 242, 1) 100%
+          );
+          background: -webkit-linear-gradient(
+            0deg,
+            rgba(240, 242, 201, 1) 0%,
+            rgba(12, 47, 242, 1) 100%
+          );
+          background: linear-gradient(
+            0deg,
+            rgba(240, 242, 201, 1) 0%,
+            rgba(12, 47, 242, 1) 100%
+          );
+          filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f0f2c9",endColorstr="#0c2ff2",GradientType=1);
+        `
+      : css`
+          background: rgb(2, 0, 36);
+          background: linear-gradient(
+            0deg,
+            rgba(2, 0, 36, 0.5494791666666667) 0%,
+            rgba(0, 212, 255, 0.4150253851540616) 100%
+          );
+        `}
 
   border-radius: 60% 60% 18% 18% / 100% 100% 25% 25%;
   position: relative;
@@ -105,7 +121,13 @@ const StyledChatRoomMarker = styled.div<{ $show: boolean; $expand: boolean }>`
   transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
-export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
+export const ChatRoomMarker = ({
+  chatRoom,
+  isValid,
+}: {
+  chatRoom: ChatRoomType;
+  isValid: boolean;
+}) => {
   const navigate = useNavigate();
   const { curLocation } = useMyLocationContext();
   const [isHover, setIsHover] = useState(false);
@@ -117,30 +139,34 @@ export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
   const handleMouseLeave = () => setIsHover(false);
 
   const handleClick = () => {
-    setIsExpanding(true);
-    setTimeout(() => {
-      getRecentChat(chatRoom.id, curLocation.lat, curLocation.lng)
-        .then((res) => {
-          if (res.status !== 401) {
-            if (res.data.isChatter) {
-              //기존 채팅방, isChatter가 true인 경우
-              navigate(`/chat/${chatRoom.id}`);
+    if (isValid) {
+      setIsExpanding(true);
+      setTimeout(() => {
+        getRecentChat(chatRoom.id, curLocation.lat, curLocation.lng)
+          .then((res) => {
+            if (res.status !== 401) {
+              if (res.data.isChatter) {
+                //기존 채팅방, isChatter가 true인 경우
+                navigate(`/chat/${chatRoom.id}`);
+              } else {
+                //기존 채팅방, isChatter가 false인 경우
+                navigate(`/enter/${chatRoom.id}`);
+              }
             } else {
-              //기존 채팅방, isChatter가 false인 경우
-              navigate(`/enter/${chatRoom.id}`);
+              alert("다시 로그인 해주세요.");
+              navigate(`/login`);
             }
-          } else {
-            alert("다시 로그인 해주세요.");
-            navigate(`/login`);
-          }
-        })
-        .catch((error) => {
-          console.log(
-            "error getting recent chat (getting previous chats)",
-            error
-          );
-        });
-    }, 1000);
+          })
+          .catch((error) => {
+            console.log(
+              "error getting recent chat (getting previous chats)",
+              error
+            );
+          });
+      }, 1000);
+    } else {
+      alert(`너무 먼 거리의 채팅방입니다.`);
+    }
   };
 
   return (
@@ -156,11 +182,13 @@ export const ChatRoomMarker = ({ chatRoom }: { chatRoom: ChatRoomType }) => {
         className="chatRoomMarker"
         $show={isHover}
         $expand={isExpanding}
+        $valid={isValid}
       />
       <ChatRoomInfo
         chatRoom={chatRoom}
         isHover={isHover}
         expand={isExpanding}
+        valid={isValid}
       />
     </MarkerContainer>
   );

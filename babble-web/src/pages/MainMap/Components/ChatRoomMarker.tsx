@@ -50,13 +50,18 @@ to {
 `;
 
 const expandToFullScreen = keyframes`
-  to {
+30%{
+  opacity: 0.3;
+}
+  100% {
     width: 100vw;
-    height: 100vh;
-    border-radius: 0;
+    height: 100vw;
+    border-radius: 50%;
     opacity: 0.1;
     bottom: 0;
     left: 0;
+    background: rgb(1,72,113);
+background: radial-gradient(circle, rgba(1,72,113,1) 0%, rgba(215,237,226,0) 100%);
   }
 `;
 

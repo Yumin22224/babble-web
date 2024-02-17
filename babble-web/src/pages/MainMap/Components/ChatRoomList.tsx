@@ -10,32 +10,25 @@ const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+  transform: translate(-50%, -50%)
+    ${(props) => (props.$show ? "scale(1)" : "scale(0)")};
   z-index: 1000;
-
   min-width: calc(15rem + 5vw);
   padding: 3vw;
   overflow-y: auto;
   overscroll-behavior: contain;
   height: calc(20rem + 5vh);
-
-  border: 1px solid rgba(12, 46, 242, 0.2);
+  background: var(--4-hex);
   box-shadow:
-    9px 9px 16px rgba(163, 177, 198, 0.6),
-    -9px -9px 16px rgba(255, 255, 255, 0.6);
-  border-radius: 30px;
+    -8px -8px 16px rgba(255, 255, 255, 0.8),
+    8px 8px 16px rgba(163, 177, 198, 0.5);
+  border-radius: 20px;
+  transition: transform 0.5s ease-in-out;
 
-  //애니메이션이 안먹힌다... visibility로 해야할 것 같다 (미해결)
-  ${($show) => $show && `transform : translate(-50%, -50%) scale(1);`}
-  transition-delay: 1s;
-  transition: scale ease-in-out 0.5s;
-
-  // 웹킷 기반 브라우저를 위한 스타일
   &::-webkit-scrollbar {
     width: 0;
   }
 
-  // Firefox를 위한 스타일
   scrollbar-width: none;
 `;
 
@@ -72,28 +65,34 @@ export const ListDiv = ({ show }: { show: boolean }) => {
 };
 
 const StyledBox = styled(GlassmorphismDiv)`
+  margin-bottom: 3vh;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 2fr;
   gap: 1vw 1vw;
   align-items: stretch;
   justify-items: center;
-
-  margin: 1vw;
+  //margin: 1vw;
   padding: 1vw;
-
   border-radius: 15%/30%;
+  background: #e0e5ec; /* 하늘색 계열의 배경색 */
+  box-shadow:
+    -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(163, 177, 198, 0.5);
+  transition: background-color 0.3s ease;
 
-  border: 1px solid rgba(12, 46, 242, 0.5);
+  &:hover {
+    background-color: #dce4f2; /* 호버 시 배경색 변경 */
+  }
 
   .hashTag {
     grid-column: 1/2;
     grid-row: 1/2;
-    //margin: 1vw 0 0 1vw;
-
     border-radius: 30px;
-    background-color: rgba(12, 46, 242, 0.1);
+    background-color: rgba(12, 46, 242, 0.1); /* 파란색 계열의 배경색 */
     padding: 0.3vw;
+    font-weight: bold;
+    color: rgba(12, 46, 242, 1); /* 진한 파란색 텍스트 */
   }
   .roomName {
     width: 90%;
@@ -102,18 +101,7 @@ const StyledBox = styled(GlassmorphismDiv)`
     font-weight: 600;
     line-height: 1.5;
     font-size: 1.3rem;
-
-    text-shadow:
-      0 0 5px #ffffff,
-      0 0 6px #ffffff,
-      0 0 7px #ffffff,
-      0 0 8px #ffffff,
-      0 0 9px #ffffff,
-      0 0 11px #ffffff,
-      0 0 13px #ffffff,
-      0 0 15px #ffffff,
-      0 0 17px #ffffff,
-      0 0 21px #fff;
+    color: rgba(53, 81, 242, 1); /* 중간 파란색 텍스트 */
   }
 `;
 

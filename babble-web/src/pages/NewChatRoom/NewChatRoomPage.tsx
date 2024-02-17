@@ -19,7 +19,7 @@ const StyledNewChatRoomDiv = styled.div`
   padding: 1vw 1vw;
   
 
-  background: var(--4-hex); /* 하늘색 계열의 배경색 */
+  background: var(--4-hex); 
   //box-shadow:
     -8px -8px 16px rgba(255, 255, 255, 0.8),
     8px 8px 16px rgba(163, 177, 198, 0.5);

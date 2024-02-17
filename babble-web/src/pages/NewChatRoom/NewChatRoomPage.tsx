@@ -8,9 +8,8 @@ import { NewChatRoomContext } from "../../Context/ChatRoomsContext";
 import { useNavigate } from "react-router-dom";
 import { Wrapper } from "../../StyledComponents/Wrapper";
 
-const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
-
-  width: calc(10vw + 19em);
+const StyledNewChatRoomDiv = styled.div`
+  width: calc(25vw + 29em);
   height: calc(5vw + 20em);
   border-radius: 30%/40%;
   display: flex;
@@ -18,7 +17,12 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
   justify-content: space-around;
   align-items: center;
   padding: 1vw 1vw;
+  
 
+  background: var(--4-hex); /* 하늘색 계열의 배경색 */
+  //box-shadow:
+    -8px -8px 16px rgba(255, 255, 255, 0.8),
+    8px 8px 16px rgba(163, 177, 198, 0.5);
   h1 {
     font-size: 1.7em;
   }
@@ -40,6 +44,7 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
     font-size: 1.3em;
     font-weight: 600;
     margin-top: 1vw;
+    color:var(--3-hex);
   }
   input {
     all: unset;
@@ -47,15 +52,15 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
     height: calc(3vh + 2rem);
     width: calc(6vw + 18rem);
     border-radius: 10% / 50%;
-    --gradient-start: #5583ee;
-    --gradient-end: #41d8dd;
-    background: linear-gradient(
-      33deg,
-      var(--gradient-start),
-      var(--gradient-end)
-    );
 
     margin: 0 4vw;
+  }
+  input {
+    border: none;
+    background: #e0e5ec;
+    box-shadow:
+      inset 8px 8px 16px rgba(163, 177, 198, 0.2),
+      inset -8px -8px 16px rgba(255, 255, 255, 0.8);
   }
   input::placeholder {
     mix-blend-mode: difference;
@@ -64,10 +69,25 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
 `;
 
 const StyledTag = styled.div<{ $selected: boolean }>`
-  color: black;
+  background: ${({ $selected }) => ($selected ? "#AED0EA" : "transparent")};
+  border-radius: 25px;
+  padding: 5px 10px;
+  width: calc(3vw + 2.5rem);
+  box-shadow: ${({ $selected }) =>
+    $selected
+      ? "inset 5px 5px 10px #99a9b3, inset -5px -5px 10px #ffffff"
+      : "5px 5px 10px #99a9b3, -5px -5px 10px #ffffff"};
 
   &.selected {
+    box-shadow:
+      inset 5px 5px 10px #b8bcc3,
+      inset -5px -5px 10px #fff;
     color: white;
+  }
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    background: #aed0ea; /* 하버 시 하늘색 배경 */
   }
 `;
 
@@ -75,6 +95,23 @@ const CreateBtn = styled(StyledButton)`
   font-size: calc(1vw + 0.8em);
   line-height: calc(2vh + 0.3em);
   font-weight: 700;
+
+  background: rgba(53, 81, 242, 1);
+  color: white;
+  border-radius: 20px;
+  padding: 10px 20px;
+  box-shadow:
+    -5px -5px 10px rgba(255, 255, 255, 0.8),
+    5px 5px 10px rgba(163, 177, 198, 0.5);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-top:1vh;
+  &:hover {
+    box-shadow:
+      -2px -2px 5px rgba(255, 255, 255, 0.8),
+      2px 2px 5px rgba(163, 177, 198, 0.5);
+  }
 `;
 
 const StyledWrapper = styled(Wrapper)`

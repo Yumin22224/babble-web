@@ -106,7 +106,7 @@ const CreateBtn = styled(StyledButton)`
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  margin-top:1vh;
+  margin-top: 1vh;
   &:hover {
     box-shadow:
       -2px -2px 5px rgba(255, 255, 255, 0.8),
@@ -195,6 +195,10 @@ const NewChatRoomPage = ({ isVisible }: { isVisible: boolean }) => {
   const handleCreateClick = () => {
     if (curLocation.lat === 0 && curLocation.lng === 0) {
       alert("잠시만 기다려주세요. (위치 정보 갱신중...)");
+      return;
+    }
+    if (roomName.length === 0) {
+      alert("방 이름을 입력해주세요.");
       return;
     }
     const newRoom = {

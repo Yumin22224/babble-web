@@ -26,14 +26,12 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{
   $invColor: ColorType;
 }>`
   width: calc(5vw + 15em);
-  height: calc(5vw + 15em);
+  height: calc(5vw + 17em);
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  background-color: ${({ $invColor }) =>
-    `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 0.3)`};
-  color: ${({ $color }) => `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
+  background: var(--4-hex);
 
   animation: ${fadeIn} 1s forwards;
 
@@ -44,29 +42,46 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{
     grid-template-rows: 1fr 2fr;
     align-items: center;
     justify-content: center;
-    border: 1px solid;
-    border-radius: 10% / 40%;
+    padding: 1em;
+    background: #e0e5ec;
+    border-radius: 20px;
+    box-shadow:
+      inset -6px -6px 12px rgba(255, 255, 255, 0.8),
+      inset 6px 6px 12px rgba(163, 177, 198, 0.5);
+    margin: 1vw 0;
+  }
+
+  .roomName,
+  .hashTag,
+  .memberCount {
+    color: rgba(53, 81, 242, 1);
+    font-weight: 600;
+    text-align: center;
   }
 
   .roomName {
     grid-column: 1/3;
     grid-row: 2/3;
     font-weight: 600;
-    font-size: x-large;
+    font-size: larger;
     margin: 0;
   }
   .memberCount {
     grid-column: 2/3;
     grid-row: 1/2;
+    background: rgba(209, 253, 255, 0.2);
+    border-radius: 10px;
+    padding: 5px 10px;
 
-    //margin: 1vw 1.5vw 1vw 2vw;
     margin-top: 0.3vw;
   }
   .hashTag {
     grid-column: 1/2;
     grid-row: 1/2;
 
-    //margin: 1vw 1.5vw 1vw 2vw;
+    background: rgba(209, 253, 255, 0.6);
+    border-radius: 10px;
+    padding: 5px 10px;
     margin-top: 0.3vw;
   }
 
@@ -80,13 +95,31 @@ const StyledChatRoomEnterDiv = styled(GlassmorphismDiv)<{
     all: unset;
     //color: white;
     align-self: stretch;
-    height: 5vw;
-    border-radius: 10% / 50%;
+    height: calc(3rem + 5vh);
+    box-shadow:
+      inset 8px 8px 16px rgba(163, 177, 198, 0.2),
+      inset -8px -8px 16px rgba(255, 255, 255, 0.8);
+    border-radius: 20px; /* 입력 필드에 둥근 모서리 적용 */
     background-color: ${({ $invColor }) =>
-      `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 0.7)`};
+      `rgba(${$invColor.r}, ${$invColor.g}, ${$invColor.b}, 0.3)`};
+    color: ${({ $color }) => `rgba(${$color.r}, ${$color.g}, ${$color.b}, 1)`};
   }
+
   .enter {
-    margin-top: 2vw;
+    background: rgba(53, 81, 242, 1); /* 버튼 배경색 */
+    color: white; /* 버튼 텍스트 색상 */
+    box-shadow:
+      -5px -5px 10px rgba(255, 255, 255, 0.8),
+      5px 5px 10px rgba(163, 177, 198, 0.5);
+    border-radius: 20px; /* 버튼에 둥근 모서리 적용 */
+    font-weight: 700;
+    padding: 10px 20px; /* 버튼 내부 패딩 */
+    cursor: pointer; /* 마우스 호버 시 커서 변경 */
+    &:hover {
+      background: rgba(12, 46, 242, 1); /* 호버 시 배경색 변경 */
+    }
+
+    margin-top: 2vh;
   }
 `;
 

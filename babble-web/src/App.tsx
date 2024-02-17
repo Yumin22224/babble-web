@@ -1,6 +1,6 @@
 import "./App.css";
 //import styled from "styled-components"
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing/LandingPage";
 import { MyLocationProvider } from "./Context/MyLocationContext";
 import Header from "./pages/Header";
@@ -30,6 +30,7 @@ function App() {
           <NewChatRoomProvider>
             <Routes>
               <Route path="/login" element={<Landing />} />
+              <Route path="/" element={<Navigate replace to="/login" />} />
               <Route
                 path="/"
                 element={

@@ -168,6 +168,22 @@ const StyledSendDiv = styled.div<{ $color: ColorType; $invColor: ColorType }>`
   transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
+function useInterval(callback: any, delay: any) {
+  const savedCallback = useRef<any>();
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      const id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
+
 const ChatRoomPage = () => {
   const navigate = useNavigate();
   const context = useContext(NewChatRoomContext);
@@ -199,60 +215,66 @@ const ChatRoomPage = () => {
     day: 0,
   });
 
-  useEffect(() => {
-    //getChatRooms 말고 그냥 getRecentChat으로 수정해도 ㄱㅊ (미해결)
-    async function fetchData() {
-      try {
-        const roomsResponse = await getChatRooms(curLocation);
-        if (roomsResponse.err) {
-          alert("다시 로그인 해주세요.");
-          navigate(`/login`);
-          return;
-        }
-        setChatRooms(roomsResponse);
-
-        const foundRoom = roomsResponse.find(
-          (room: ChatRoomType) => room.id === chatRoomId
-        );
-        if (foundRoom) {
-          setCurChatRoom(foundRoom);
-          //console.log(foundRoom);
-        } else {
-          console.log("No room found with ID:", chatRoomId);
-          alert("해당 채팅방은 존재하지 않습니다.");
-          navigate(`/main`);
-          return;
-        }
-
-        if (foundRoom) {
-          const chatsResponse = await getRecentChat(
-            chatRoomId,
-            curLocation.lat,
-            curLocation.lng
-          );
-          setChatterCnt(chatsResponse.data.chatterCount);
-
-          setChats(chatsResponse.data.chats);
-
-          if (chatsResponse.data.chats.length > 0) {
-            const date = new Date(
-              chatsResponse.data.chats[0].createdTimeInSec * 1000
-            );
-            setLastChatDate({
-              year: date.getFullYear(),
-              month: date.getMonth() + 1,
-              day: date.getDate(),
-            });
-          }
-        }
-      } catch (error) {
-        console.error("Fetching failed:", error);
+  async function fetchData() {
+    try {
+      const roomsResponse = await getChatRooms(curLocation);
+      if (roomsResponse.err) {
         alert("다시 로그인 해주세요.");
         navigate(`/login`);
+        return;
       }
+      setChatRooms(roomsResponse);
+
+      const foundRoom = roomsResponse.find(
+        (room: ChatRoomType) => room.id === chatRoomId
+      );
+      if (foundRoom) {
+        setCurChatRoom(foundRoom);
+        //console.log(foundRoom);
+      } else {
+        console.log("No room found with ID:", chatRoomId);
+        alert("해당 채팅방은 존재하지 않습니다.");
+        navigate(`/main`);
+        return;
+      }
+
+      if (foundRoom) {
+        const chatsResponse = await getRecentChat(
+          chatRoomId,
+          curLocation.lat,
+          curLocation.lng
+        );
+        setChatterCnt(chatsResponse.data.chatterCount);
+
+        setChats(chatsResponse.data.chats);
+
+        if (chatsResponse.data.chats.length > 0) {
+          const date = new Date(
+            chatsResponse.data.chats[0].createdTimeInSec * 1000
+          );
+          setLastChatDate({
+            year: date.getFullYear(),
+            month: date.getMonth() + 1,
+            day: date.getDate(),
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Fetching failed:", error);
+      alert("다시 로그인 해주세요.");
+      navigate(`/login`);
     }
+  }
+
+  useInterval(() => {
     fetchData();
-  }, [chatRoomId, curLocation, navigate, setChatRooms]);
+  }, 3000);
+
+  useEffect(() => {
+    //getChatRooms 말고 그냥 getRecentChat으로 수정해도 ㄱㅊ (미해결)
+
+    fetchData();
+  }, [chatRoomId, navigate, setChatRooms]);
 
   const [chatContent, setChatContent] = useState("");
   const [isReply, setIsReply] = useState(false);

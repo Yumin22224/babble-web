@@ -13,7 +13,8 @@ type ChatRoomType = {
 //현재 위치를 기준으로 채팅방 목록을 조회한다.
 export async function getChatRooms(p: positionType) {
   try {
-    const urlWithQuery = `${baseUrl}/api/chat/rooms?latitude=${p.lat}&longitude=${p.lng}`;
+    const urlWithQuery =
+      baseUrl + `/api/chat/rooms?latitude=${p.lat}&longitude=${p.lng}`;
     const res = await axios.get(urlWithQuery, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,

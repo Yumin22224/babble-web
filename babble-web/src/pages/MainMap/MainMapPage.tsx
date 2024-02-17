@@ -8,7 +8,7 @@ import NewChatRoomPage from "../NewChatRoom/NewChatRoomPage";
 const StyledMainContainer = styled.div`
   width: 100%;
   height: 100vh;
-  overflow-x: hidden;
+  
 
   // 웹킷 기반 브라우저를 위한 스타일
   &::-webkit-scrollbar {
@@ -46,37 +46,37 @@ const StyledWrapper = styled.div<{ $show: boolean }>`
   );
 `;
 
-
- 
-
 const MainPage = () => {
   const [showList, setShowList] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
   const handleClick = () => {
     setShowList(!showList);
   };
-  const [scroll, setScroll] = useState(false);
 
   const closeList = (e) => {
     setShowList(false);
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      // 예: 스크롤 위치가 100px 이상일 때 fade-out 효과 적용
+      if (window.scrollY > 200) {
+        console.log(window.scrollY);
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
     window.addEventListener("scroll", handleScroll);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
     return () => {
-      window.removeEventListener("scroll", handleScroll); //clean up
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  const handleScroll = () => {
-    // 스크롤이 Top에서 50px 이상 내려오면 true값을 useState에 넣어줌
-    if (window.scrollY >= 1) {
-      setScroll(true);
-      console.log(scroll);
-    } else {
-      // 스크롤이 50px 미만일경우 false를 넣어줌
-      setScroll(false);
-    }
-  };
   return (
     <StyledMainContainer>
       <StyledMainDiv>
@@ -88,7 +88,7 @@ const MainPage = () => {
         )}
         <MainMap />
       </StyledMainDiv>
-      <NewChatRoomPage />
+      <NewChatRoomPage isVisible={isVisible} />
     </StyledMainContainer>
   );
 };

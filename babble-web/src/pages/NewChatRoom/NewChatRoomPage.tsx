@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Wrapper } from "../../StyledComponents/Wrapper";
 
 const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
+
   width: calc(10vw + 19em);
   height: calc(5vw + 20em);
   border-radius: 30%/40%;
@@ -58,7 +59,7 @@ const StyledNewChatRoomDiv = styled(GlassmorphismDiv)`
   }
   input::placeholder {
     mix-blend-mode: difference;
-    opacity:0.7;
+    opacity: 0.7;
   }
 `;
 
@@ -74,6 +75,17 @@ const CreateBtn = styled(StyledButton)`
   font-size: calc(1vw + 0.8em);
   line-height: calc(2vh + 0.3em);
   font-weight: 700;
+`;
+
+const StyledWrapper = styled(Wrapper)`
+  &.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  opacity: 0;
+  visibility: hidden;
+
+  transition: all 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
 `;
 
 const tagGuide = [
@@ -121,7 +133,7 @@ const tagGuide = [
   },
 ];
 
-const NewChatRoomPage = () => {
+const NewChatRoomPage = ({ isVisible }: { isVisible: boolean }) => {
   const navigate = useNavigate();
   const [selectedTag, setSelectedTag] = useState(0);
   const [roomName, setRoomName] = useState("");
@@ -160,8 +172,8 @@ const NewChatRoomPage = () => {
   };
 
   return (
-    <Wrapper>
-      <StyledNewChatRoomDiv>
+    <StyledWrapper className={`wrapper ${isVisible && `show`}`}>
+      <StyledNewChatRoomDiv className={`${isVisible && "showDiv"}`}>
         <h1>현 위치에 채팅방 개설</h1>
         <div className="tagTitle">태그를 선택해주세요</div>
         <div className="tagContainer">
@@ -178,7 +190,6 @@ const NewChatRoomPage = () => {
         </div>
         <label htmlFor="roomTitle">{tagGuide[selectedTag].guide}</label>
         <input
-          
           type="text"
           id="roomTitle"
           onChange={handleChange}
@@ -188,7 +199,7 @@ const NewChatRoomPage = () => {
           생성
         </CreateBtn>
       </StyledNewChatRoomDiv>
-    </Wrapper>
+    </StyledWrapper>
   );
 };
 

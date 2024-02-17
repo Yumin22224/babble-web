@@ -29,7 +29,7 @@ const StyledMainDiv = styled.div`
 
 const StyledWrapper = styled.div<{ $show: boolean }>`
   z-index: 300;
-  background: rgba(0, 0, 0, 0.4);
+
   width: 100vw;
   height: 100vh;
   position: fixed;
@@ -38,7 +38,16 @@ const StyledWrapper = styled.div<{ $show: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  background-image: linear-gradient(
+    to bottom,
+    rgba(253, 219, 146, 0.1) 0%,
+    rgba(209, 253, 255, 1) 100%
+  );
 `;
+
+
+ 
 
 const MainPage = () => {
   const [showList, setShowList] = useState(false);
@@ -95,14 +104,8 @@ const StyledListBtn = styled(GlassmorphismDiv)<{ $show: boolean }>`
   width: 30px;
   height: 30px;
   padding: 5px;
-
-  background: linear-gradient(
-    90deg,
-    rgba(0, 240, 255, 0.3) 2.9%,
-    rgba(255, 0, 229, 0.3) 49.2%,
-    rgba(0, 255, 209, 0.3) 97.48%
-  );
-  border: 4px solid rgba(0, 25, 255, 0.3);
+  filter: invert(21%) sepia(79%) saturate(3711%) hue-rotate(231deg)
+    brightness(100%) contrast(90%);
   box-shadow: -9px -9px 16px rgba(255, 255, 255, 0.6);
   border-radius: 30px;
 

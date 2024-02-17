@@ -30,7 +30,7 @@ const StyledChatRoomInfo = styled.div<{
   display: ${(prop) => (prop.$show && !prop.$expand ? "flex" : "none")};
   flex-direction: column;
   justify-content: center;
-
+  align-items: center;
   position: absolute;
   bottom: 50px;
   width: 150px;
@@ -39,7 +39,7 @@ const StyledChatRoomInfo = styled.div<{
 
   overflow: hidden;
 
-  color: #9fa5d5;
+  color: var(--3-hex);
 
   &::before {
     content: "";
@@ -100,6 +100,11 @@ const StyledTag = styled.div`
   mix-blend-mode: hard-light;
   border-radius: 40%;
   z-index: 500;
+  font-size: 12px;
+  width: 30%;
+  margin-bottom: 7px;
+  border-radius: 40%;
+  background-color: white;
 `;
 
 const StyledName = styled.div`

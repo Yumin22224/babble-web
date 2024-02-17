@@ -6,36 +6,20 @@ import { getChatRooms, getRecentChat } from "../../../API/ChatAPI";
 import { useMyLocationContext } from "../../../Context/MyLocationContext";
 import { useEffect, useState } from "react";
 
-const StyledBackGround = styled.div<{ $show: boolean }>`
-  box-sizing: border-box;
-  z-index: 999;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 110%;
-  height: 110%;
-  box-shadow: inset 0px 4px 34px rgba(255, 255, 255, 0.6);
-  filter: blur(40px);
-`;
-
 const StyledListDiv = styled(GlassmorphismDiv)<{ $show: boolean }>`
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) scale(0);
   z-index: 1000;
-  border-radius: 20%;
+
   min-width: calc(15rem + 5vw);
   padding: 3vw;
   overflow-y: auto;
   overscroll-behavior: contain;
   height: calc(20rem + 5vh);
 
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 10% /20%;
-  
-  border: 7px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(12, 46, 242, 0.2);
   box-shadow:
     9px 9px 16px rgba(163, 177, 198, 0.6),
     -9px -9px 16px rgba(255, 255, 255, 0.6);
@@ -80,7 +64,6 @@ export const ListDiv = ({ show }: { show: boolean }) => {
   }, []);
   return (
     <StyledListDiv $show={show} className="list shadow-2-drop">
-      <StyledBackGround $show={show} />
       {chatRooms.map((chatRoom) => (
         <Box chatRoom={chatRoom} />
       ))}
@@ -99,19 +82,38 @@ const StyledBox = styled(GlassmorphismDiv)`
   margin: 1vw;
   padding: 1vw;
 
-  border-radius:15%/30%;
-  
+  border-radius: 15%/30%;
+
+  border: 1px solid rgba(12, 46, 242, 0.5);
 
   .hashTag {
     grid-column: 1/2;
     grid-row: 1/2;
     //margin: 1vw 0 0 1vw;
+
+    border-radius: 30px;
+    background-color: rgba(12, 46, 242, 0.1);
+    padding: 0.3vw;
   }
   .roomName {
+    width: 90%;
     grid-column: 1/4;
     grid-row: 2/3;
     font-weight: 600;
-    line-height: 1.7;
+    line-height: 1.5;
+    font-size: 1.3rem;
+
+    text-shadow:
+      0 0 5px #ffffff,
+      0 0 6px #ffffff,
+      0 0 7px #ffffff,
+      0 0 8px #ffffff,
+      0 0 9px #ffffff,
+      0 0 11px #ffffff,
+      0 0 13px #ffffff,
+      0 0 15px #ffffff,
+      0 0 17px #ffffff,
+      0 0 21px #fff;
   }
 `;
 

@@ -162,7 +162,7 @@ const NewChatRoomPage = () => {
   return (
     <Wrapper>
       <StyledNewChatRoomDiv>
-        <h1>새로운 채팅방 개설</h1>
+        <h1>현 위치에 채팅방 개설</h1>
         <div className="tagTitle">태그를 선택해주세요</div>
         <div className="tagContainer">
           {tagGuide.map((tag, index) => (

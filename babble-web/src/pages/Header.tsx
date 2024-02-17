@@ -18,6 +18,8 @@ const StyledHeader = styled(GlassmorphismDiv)<{ $isChatRoute: boolean }>`
   align-items: center;
   padding: 1em;
 
+  border: 1px solid rgba(12, 46, 242, 0.2);
+
   transform: scale(0.8);
   & > h1,
   p {

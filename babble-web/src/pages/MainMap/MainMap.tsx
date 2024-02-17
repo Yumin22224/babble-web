@@ -49,11 +49,14 @@ const MainMap = () => {
           },
           (error) => {
             console.error("위치 정보 접근 실패:", error);
+            if (error.code === 3) {
+              alert("잠시만 기다려주세요. (위치 정보 갱신 지연...)");
+            }
           },
           {
             enableHighAccuracy: false,
             maximumAge: 5000, // 5초 동안 캐시된 위치 정보 사용 허용
-            timeout: 20000, // 위치 정보를 가져오기 위한 최대 대기 시간(밀리초)
+            timeout: 300000, // 위치 정보를 가져오기 위한 최대 대기 시간(밀리초)
           }
         );
         setWatchID(wId);
